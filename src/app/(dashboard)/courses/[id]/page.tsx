@@ -8,9 +8,19 @@ import {
   syncCourseMaterials,
 } from "@/features/materials/server/materials";
 import { syncCourseMaterialsAction } from "@/features/materials/server/actions";
+import { listDownloadsForCourse } from "@/features/downloads/server/downloads";
+import { enqueueDownloadsAction } from "@/features/downloads/server/actions";
 import { Button } from "@/components/ui/button";
 import { getCallbackRedirectUri } from "@/lib/redirect-uri";
 import type { FileTypeGroup, PostCategory } from "@/features/materials/types/post";
+import type { DownloadStatus } from "@/features/downloads/types/download";
+
+const DOWNLOAD_STATUS_LABEL: Record<DownloadStatus, string> = {
+  QUEUED: "Na fila",
+  DOWNLOADING: "Baixando...",
+  DONE: "Baixado ✓",
+  ERROR: "Erro",
+};
 
 const CATEGORIES: { value: PostCategory; label: string }[] = [
   { value: "TAREFA", label: "Tarefas" },
@@ -43,6 +53,7 @@ export default async function CourseMaterialsPage({
     category?: string | string[];
     fileType?: string | string[];
     topicId?: string;
+    downloadStatus?: string;
   }>;
 }) {
   const session = await getSession();
@@ -60,16 +71,29 @@ export default async function CourseMaterialsPage({
     await syncCourseMaterials(id, await getCallbackRedirectUri());
   }
 
-  const { category, fileType, topicId } = await searchParams;
+  const { category, fileType, topicId, downloadStatus } = await searchParams;
   const categories = toArray(category) as PostCategory[];
   const fileTypes = toArray(fileType) as FileTypeGroup[];
 
   const topics = listTopics(id);
-  const materials = listCourseMaterials(id, {
+  const statusByMaterial = new Map(
+    listDownloadsForCourse(id).map((download) => [download.materialId, download.status])
+  );
+
+  let materials = listCourseMaterials(id, {
     category: categories.length ? categories : undefined,
     fileType: fileTypes.length ? fileTypes : undefined,
     topicId: topicId || undefined,
   });
+
+  if (downloadStatus === "NOVO") {
+    materials = materials.filter((material) => statusByMaterial.get(material.id) !== "DONE");
+  } else if (downloadStatus === "BAIXADO") {
+    materials = materials.filter((material) => statusByMaterial.get(material.id) === "DONE");
+  }
+
+  const downloadableIds = materials.filter((material) => material.type === "DRIVE_FILE").map((material) => material.id);
+
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-12">
@@ -142,8 +166,35 @@ export default async function CourseMaterialsPage({
           </label>
         )}
 
+        <fieldset className="flex flex-col gap-1.5">
+          <legend className="text-sm font-semibold text-muted-foreground">Status de download</legend>
+          <div className="flex flex-wrap gap-3">
+            {[
+              { value: "", label: "Todos" },
+              { value: "NOVO", label: "Novo" },
+              { value: "BAIXADO", label: "Já baixado" },
+            ].map((option) => (
+              <label key={option.value} className="flex items-center gap-1.5 text-sm text-foreground">
+                <input
+                  type="radio"
+                  name="downloadStatus"
+                  value={option.value}
+                  defaultChecked={(downloadStatus ?? "") === option.value}
+                />
+                {option.label}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
         <Button type="submit" variant="secondary" size="sm" className="self-start">
           Filtrar
+        </Button>
+      </form>
+
+      <form action={enqueueDownloadsAction.bind(null, downloadableIds)}>
+        <Button type="submit" size="sm" disabled={downloadableIds.length === 0}>
+          Baixar {downloadableIds.length} arquivo(s)
         </Button>
       </form>
 
@@ -157,7 +208,8 @@ export default async function CourseMaterialsPage({
           <div className="flex flex-col gap-2">
             {materials.map((material) => {
               const label = material.title ?? material.postTitle ?? material.postText ?? "Sem título";
-              const meta = `${material.postCategory} · ${material.fileType}`;
+              const status = statusByMaterial.get(material.id);
+              const meta = `${material.postCategory} · ${material.fileType} · ${status ? DOWNLOAD_STATUS_LABEL[status] : "Novo"}`;
 
               return material.alternateLink ? (
                 <a
