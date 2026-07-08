@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation";
-import { getSession } from "@/features/auth/server/session";
 import { listCourses, syncCourses } from "@/features/courses/server/courses";
 import { syncCoursesAction } from "@/features/courses/server/actions";
 import { CourseCard } from "@/features/courses/components/course-card";
@@ -12,11 +10,6 @@ export default async function CoursesPage({
 }: {
   searchParams: Promise<{ q?: string }>;
 }) {
-  const session = await getSession();
-  if (!session.isLoggedIn) {
-    redirect("/");
-  }
-
   const { q } = await searchParams;
 
   if (listCourses().length === 0) {
@@ -27,7 +20,7 @@ export default async function CoursesPage({
   const [active, archived] = states.map((state) => listCourses({ state, query: q }));
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-12">
+    <>
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Turmas
@@ -74,6 +67,6 @@ export default async function CoursesPage({
           ))}
         </div>
       </details>
-    </div>
+    </>
   );
 }
