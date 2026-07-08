@@ -11,7 +11,7 @@ import {
   Video,
   type LucideIcon,
 } from "lucide-react";
-import { ViewToggle } from "@/components/view-toggle";
+import { ViewItems, ViewToggle, type ViewMode } from "@/components/view-toggle";
 import { DOWNLOAD_STATUS_LABEL } from "@/features/downloads/constants";
 import type { DownloadStatus } from "@/features/downloads/types/download";
 import type { FileTypeGroup, MaterialListItem } from "@/features/materials/types/post";
@@ -41,7 +41,7 @@ function statusMeta(material: MaterialWithStatus): string {
 }
 
 export function MaterialsView({ materials }: { materials: MaterialWithStatus[] }) {
-  const [view, setView] = useState<"list" | "grid">("list");
+  const [view, setView] = useState<ViewMode>("list");
 
   if (materials.length === 0) {
     return <p className="text-sm text-muted-foreground">Nenhum material encontrado.</p>;
@@ -51,19 +51,13 @@ export function MaterialsView({ materials }: { materials: MaterialWithStatus[] }
     <div className="flex flex-col gap-3">
       <ViewToggle value={view} onChange={setView} />
 
-      {view === "grid" ? (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {materials.map((material) => (
-            <MaterialCard key={material.id} material={material} />
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-col gap-2">
-          {materials.map((material) => (
-            <MaterialRow key={material.id} material={material} />
-          ))}
-        </div>
-      )}
+      <ViewItems
+        view={view}
+        items={materials}
+        keyFor={(material) => material.id}
+        renderListItem={(material) => <MaterialRow material={material} />}
+        renderGridItem={(material) => <MaterialCard material={material} />}
+      />
     </div>
   );
 }

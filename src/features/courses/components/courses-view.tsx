@@ -1,31 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { ViewToggle } from "@/components/view-toggle";
+import { ViewItems, ViewToggle, type ViewMode } from "@/components/view-toggle";
 import { CourseCard } from "@/features/courses/components/course-card";
 import { CourseGridCard } from "@/features/courses/components/course-grid-card";
 import type { Course } from "@/features/courses/types/course";
 
 export function CoursesView({ active, archived }: { active: Course[]; archived: Course[] }) {
-  const [view, setView] = useState<"list" | "grid">("list");
+  const [view, setView] = useState<ViewMode>("list");
 
   function renderCourses(courses: Course[]) {
-    if (view === "grid") {
-      return (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-          {courses.map((course) => (
-            <CourseGridCard key={course.id} course={course} />
-          ))}
-        </div>
-      );
-    }
-
     return (
-      <div className="flex flex-col gap-2">
-        {courses.map((course) => (
-          <CourseCard key={course.id} course={course} />
-        ))}
-      </div>
+      <ViewItems
+        view={view}
+        items={courses}
+        keyFor={(course) => course.id}
+        renderListItem={(course) => <CourseCard course={course} />}
+        renderGridItem={(course) => <CourseGridCard course={course} />}
+      />
     );
   }
 
