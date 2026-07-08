@@ -18,3 +18,7 @@ export async function loadRefreshToken(): Promise<string | null> {
   if (!row) return null;
   return unsealData<string>(row.refresh_token, { password: getAppSecret() });
 }
+
+export function deleteRefreshToken() {
+  db.prepare(`DELETE FROM auth_tokens WHERE id = 1`).run();
+}

@@ -32,3 +32,7 @@ export function loadGoogleCredentials(): GoogleCredentials | null {
 export function hasGoogleCredentials(): boolean {
   return loadGoogleCredentials() !== null;
 }
+
+export function deleteGoogleCredentials() {
+  db.prepare(`DELETE FROM google_credentials WHERE id = 1`).run();
+}
