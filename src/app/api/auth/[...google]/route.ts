@@ -3,6 +3,7 @@ import { createOAuthClient, getAuthUrl } from "@/lib/google";
 import { hasGoogleCredentials } from "@/features/auth/server/credentials";
 import { saveRefreshToken } from "@/features/auth/server/tokens";
 import { getSession } from "@/features/auth/server/session";
+import { fetchGoogleProfile } from "@/features/auth/server/profile";
 
 export async function GET(
   req: NextRequest,
@@ -32,9 +33,14 @@ export async function GET(
     }
 
     await saveRefreshToken(tokens.refresh_token);
+    client.setCredentials(tokens);
+    const profile = await fetchGoogleProfile(client);
 
     const session = await getSession();
     session.isLoggedIn = true;
+    session.name = profile.name;
+    session.email = profile.email;
+    session.picture = profile.picture;
     await session.save();
 
     return NextResponse.redirect(new URL("/", req.url));

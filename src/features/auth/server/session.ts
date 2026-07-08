@@ -4,6 +4,9 @@ import { getAppSecret } from "@/lib/secrets";
 
 export interface SessionData {
   isLoggedIn: boolean;
+  name?: string | null;
+  email?: string | null;
+  picture?: string | null;
 }
 
 export async function getSession(): Promise<IronSession<SessionData>> {
