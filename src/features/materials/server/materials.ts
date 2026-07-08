@@ -320,6 +320,7 @@ export interface ListCourseMaterialsFilter {
   category?: PostCategory[];
   fileType?: FileTypeGroup[];
   topicId?: string;
+  query?: string;
 }
 
 export function listCourseMaterials(
@@ -336,6 +337,11 @@ export function listCourseMaterials(
   if (filter.topicId) {
     conditions.push("p.topic_id = ?");
     params.push(filter.topicId);
+  }
+  if (filter.query) {
+    conditions.push("(m.title LIKE ? OR p.title LIKE ? OR p.text LIKE ?)");
+    const like = `%${filter.query}%`;
+    params.push(like, like, like);
   }
 
   const rows = db

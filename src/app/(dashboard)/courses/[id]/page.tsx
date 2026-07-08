@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { Suspense } from "react";
 import { ArrowLeft } from "lucide-react";
 import { getCourse } from "@/features/courses/server/courses";
 import {
@@ -9,30 +10,14 @@ import {
   syncCourseMaterials,
 } from "@/features/materials/server/materials";
 import { syncCourseMaterialsAction } from "@/features/materials/server/actions";
+import { MaterialsFilters } from "@/features/materials/components/materials-filters";
+import { MaterialsView, type MaterialWithStatus } from "@/features/materials/components/materials-view";
 import { listDownloadsForCourse } from "@/features/downloads/server/downloads";
 import { enqueueDownloadsAction } from "@/features/downloads/server/actions";
 import { DownloadAllButton } from "@/features/downloads/components/download-all-button";
 import { Button } from "@/components/ui/button";
 import { getCallbackRedirectUri } from "@/lib/redirect-uri";
 import type { FileTypeGroup, PostCategory } from "@/features/materials/types/post";
-import { DOWNLOAD_STATUS_LABEL } from "@/features/downloads/constants";
-
-const CATEGORIES: { value: PostCategory; label: string }[] = [
-  { value: "TAREFA", label: "Tarefas" },
-  { value: "MATERIAL", label: "Materiais" },
-  { value: "AVISO", label: "Avisos" },
-];
-
-const FILE_TYPES: { value: FileTypeGroup; label: string }[] = [
-  { value: "PDF", label: "PDF" },
-  { value: "WORD", label: "Word" },
-  { value: "SLIDES", label: "Slides" },
-  { value: "SHEETS", label: "Planilhas" },
-  { value: "IMAGE", label: "Imagens" },
-  { value: "VIDEO", label: "Vídeos" },
-  { value: "LINK", label: "Links" },
-  { value: "OTHER", label: "Outros" },
-];
 
 function toArray(value: string | string[] | undefined): string[] {
   if (!value) return [];
@@ -49,6 +34,7 @@ export default async function CourseMaterialsPage({
     fileType?: string | string[];
     topicId?: string;
     downloadStatus?: string;
+    q?: string;
   }>;
 }) {
   const { id } = await params;
@@ -61,7 +47,7 @@ export default async function CourseMaterialsPage({
     await syncCourseMaterials(id, await getCallbackRedirectUri());
   }
 
-  const { category, fileType, topicId, downloadStatus } = await searchParams;
+  const { category, fileType, topicId, downloadStatus, q } = await searchParams;
   const categories = toArray(category) as PostCategory[];
   const fileTypes = toArray(fileType) as FileTypeGroup[];
 
@@ -74,6 +60,7 @@ export default async function CourseMaterialsPage({
     category: categories.length ? categories : undefined,
     fileType: fileTypes.length ? fileTypes : undefined,
     topicId: topicId || undefined,
+    query: q || undefined,
   });
 
   if (downloadStatus === "NOVO") {
@@ -83,6 +70,10 @@ export default async function CourseMaterialsPage({
   }
 
   const downloadableIds = materials.filter((material) => material.type === "DRIVE_FILE").map((material) => material.id);
+  const materialsWithStatus: MaterialWithStatus[] = materials.map((material) => ({
+    ...material,
+    downloadStatus: statusByMaterial.get(material.id),
+  }));
 
 
   return (
@@ -111,84 +102,9 @@ export default async function CourseMaterialsPage({
         </form>
       </div>
 
-      <form className="flex flex-col gap-4" method="get">
-        <fieldset className="flex flex-col gap-1.5">
-          <legend className="text-sm font-semibold text-muted-foreground">Categoria</legend>
-          <div className="flex flex-wrap gap-3">
-            {CATEGORIES.map((c) => (
-              <label key={c.value} className="flex items-center gap-1.5 text-sm text-foreground">
-                <input
-                  type="checkbox"
-                  name="category"
-                  value={c.value}
-                  defaultChecked={categories.includes(c.value)}
-                />
-                {c.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        <fieldset className="flex flex-col gap-1.5">
-          <legend className="text-sm font-semibold text-muted-foreground">Tipo de arquivo</legend>
-          <div className="flex flex-wrap gap-3">
-            {FILE_TYPES.map((f) => (
-              <label key={f.value} className="flex items-center gap-1.5 text-sm text-foreground">
-                <input
-                  type="checkbox"
-                  name="fileType"
-                  value={f.value}
-                  defaultChecked={fileTypes.includes(f.value)}
-                />
-                {f.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        {topics.length > 0 && (
-          <label className="flex flex-col gap-1.5 text-sm text-muted-foreground">
-            Tópico
-            <select
-              name="topicId"
-              defaultValue={topicId ?? ""}
-              className="rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-ring"
-            >
-              <option value="">Todos</option>
-              {topics.map((topic) => (
-                <option key={topic.id} value={topic.id}>
-                  {topic.name}
-                </option>
-              ))}
-            </select>
-          </label>
-        )}
-
-        <fieldset className="flex flex-col gap-1.5">
-          <legend className="text-sm font-semibold text-muted-foreground">Status de download</legend>
-          <div className="flex flex-wrap gap-3">
-            {[
-              { value: "", label: "Todos" },
-              { value: "NOVO", label: "Novo" },
-              { value: "BAIXADO", label: "Já baixado" },
-            ].map((option) => (
-              <label key={option.value} className="flex items-center gap-1.5 text-sm text-foreground">
-                <input
-                  type="radio"
-                  name="downloadStatus"
-                  value={option.value}
-                  defaultChecked={(downloadStatus ?? "") === option.value}
-                />
-                {option.label}
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        <Button type="submit" variant="secondary" size="sm" className="self-start">
-          Filtrar
-        </Button>
-      </form>
+      <Suspense fallback={null}>
+        <MaterialsFilters topics={topics} />
+      </Suspense>
 
       <DownloadAllButton
         action={enqueueDownloadsAction.bind(null, downloadableIds)}
@@ -200,38 +116,7 @@ export default async function CourseMaterialsPage({
         <h2 className="text-sm font-semibold text-muted-foreground">
           Materiais ({materials.length})
         </h2>
-        {materials.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Nenhum material encontrado.</p>
-        ) : (
-          <div className="flex flex-col gap-2">
-            {materials.map((material) => {
-              const label = material.title ?? material.postTitle ?? material.postText ?? "Sem título";
-              const status = statusByMaterial.get(material.id);
-              const meta = `${material.postCategory} · ${material.fileType} · ${status ? DOWNLOAD_STATUS_LABEL[status] : "Novo"}`;
-
-              return material.alternateLink ? (
-                <a
-                  key={material.id}
-                  href={material.alternateLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex flex-col gap-1 rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:bg-muted"
-                >
-                  <span className="font-medium text-foreground">{label}</span>
-                  <span className="text-sm text-muted-foreground">{meta}</span>
-                </a>
-              ) : (
-                <div
-                  key={material.id}
-                  className="flex flex-col gap-1 rounded-2xl border border-border bg-card p-4 shadow-sm"
-                >
-                  <span className="font-medium text-foreground">{label}</span>
-                  <span className="text-sm text-muted-foreground">{meta}</span>
-                </div>
-              );
-            })}
-          </div>
-        )}
+        <MaterialsView materials={materialsWithStatus} />
       </section>
     </>
   );
