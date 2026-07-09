@@ -9,12 +9,7 @@ export interface Topic {
   updateTime: string | null;
 }
 
-export type MaterialType =
-  | "DRIVE_FILE"
-  | "YOUTUBE"
-  | "LINK"
-  | "FORM"
-  | "OTHER";
+export type MaterialType = "DRIVE_FILE" | "YOUTUBE" | "LINK" | "OTHER";
 
 export interface Material {
   id: string;
@@ -41,4 +36,21 @@ export interface Post {
   alternateLink: string;
   creationTime: string | null;
   updateTime: string | null;
+}
+
+export type FileTypeGroup =
+  | "PDF"
+  | "WORD"
+  | "SLIDES"
+  | "SHEETS"
+  | "IMAGE"
+  | "VIDEO"
+  | "LINK"
+  | "OTHER";
+
+export interface MaterialListItem extends Material {
+  postCategory: PostCategory;
+  postTitle: string | null;
+  postText: string | null;
+  fileType: FileTypeGroup;
 }

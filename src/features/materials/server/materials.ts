@@ -1,6 +1,13 @@
 import { db } from "@/lib/db";
 import { getClassroomClient, getDriveClient } from "@/lib/classroom";
 import type { classroom_v1 } from "googleapis";
+import type {
+  FileTypeGroup,
+  MaterialListItem,
+  MaterialType,
+  PostCategory,
+  Topic,
+} from "@/features/materials/types/post";
 
 const ALL_POST_STATES = ["PUBLISHED", "DRAFT", "DELETED"];
 
@@ -225,4 +232,126 @@ export async function syncCourseMaterials(courseId: string, redirectUri: string)
   await syncCourseWorkMaterials(classroom, courseId);
   await syncAnnouncements(classroom, courseId);
   await resolveMimeTypes(courseId, redirectUri);
+}
+
+const countPosts = db.prepare(`SELECT COUNT(*) as count FROM posts WHERE course_id = ?`);
+
+export function hasSyncedMaterials(courseId: string): boolean {
+  const row = countPosts.get(courseId) as unknown as { count: number };
+  return row.count > 0;
+}
+
+interface TopicRow {
+  id: string;
+  course_id: string;
+  name: string;
+  update_time: string | null;
+}
+
+export function listTopics(courseId: string): Topic[] {
+  const rows = db
+    .prepare(`SELECT * FROM topics WHERE course_id = ? ORDER BY name`)
+    .all(courseId) as unknown as TopicRow[];
+
+  return rows.map((row) => ({
+    id: row.id,
+    courseId: row.course_id,
+    name: row.name,
+    updateTime: row.update_time,
+  }));
+}
+
+const MIME_GROUPS: Record<string, FileTypeGroup> = {
+  "application/pdf": "PDF",
+  "application/vnd.google-apps.document": "WORD",
+  "application/msword": "WORD",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "WORD",
+  "application/vnd.google-apps.presentation": "SLIDES",
+  "application/vnd.ms-powerpoint": "SLIDES",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation": "SLIDES",
+  "application/vnd.google-apps.spreadsheet": "SHEETS",
+  "application/vnd.ms-excel": "SHEETS",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "SHEETS",
+};
+
+function fileTypeGroup(type: MaterialType, mimeType: string | null): FileTypeGroup {
+  if (type === "YOUTUBE") return "VIDEO";
+  if (type === "LINK") return "LINK";
+  if (type === "DRIVE_FILE" && mimeType) {
+    if (mimeType.startsWith("image/")) return "IMAGE";
+    if (mimeType.startsWith("video/")) return "VIDEO";
+    if (MIME_GROUPS[mimeType]) return MIME_GROUPS[mimeType];
+  }
+  return "OTHER";
+}
+
+interface MaterialRow {
+  id: string;
+  post_id: string;
+  type: MaterialType;
+  drive_file_id: string | null;
+  title: string | null;
+  alternate_link: string | null;
+  thumbnail_url: string | null;
+  mime_type: string | null;
+  post_category: PostCategory;
+  post_title: string | null;
+  post_text: string | null;
+}
+
+function toMaterialListItem(row: MaterialRow): MaterialListItem {
+  return {
+    id: row.id,
+    postId: row.post_id,
+    type: row.type,
+    driveFileId: row.drive_file_id,
+    title: row.title,
+    alternateLink: row.alternate_link,
+    thumbnailUrl: row.thumbnail_url,
+    mimeType: row.mime_type,
+    postCategory: row.post_category,
+    postTitle: row.post_title,
+    postText: row.post_text,
+    fileType: fileTypeGroup(row.type, row.mime_type),
+  };
+}
+
+export interface ListCourseMaterialsFilter {
+  category?: PostCategory[];
+  fileType?: FileTypeGroup[];
+  topicId?: string;
+}
+
+export function listCourseMaterials(
+  courseId: string,
+  filter: ListCourseMaterialsFilter = {}
+): MaterialListItem[] {
+  const conditions = ["p.course_id = ?", "p.state = 'PUBLISHED'"];
+  const params: string[] = [courseId];
+
+  if (filter.category?.length) {
+    conditions.push(`p.category IN (${filter.category.map(() => "?").join(",")})`);
+    params.push(...filter.category);
+  }
+  if (filter.topicId) {
+    conditions.push("p.topic_id = ?");
+    params.push(filter.topicId);
+  }
+
+  const rows = db
+    .prepare(
+      `SELECT m.id, m.post_id, m.type, m.drive_file_id, m.title, m.alternate_link, m.thumbnail_url, m.mime_type,
+              p.category as post_category, p.title as post_title, p.text as post_text
+       FROM materials m
+       JOIN posts p ON p.id = m.post_id
+       WHERE ${conditions.join(" AND ")}
+       ORDER BY p.update_time DESC`
+    )
+    .all(...params) as unknown as MaterialRow[];
+
+  const items = rows.map(toMaterialListItem);
+  if (!filter.fileType?.length) return items;
+
+  const fileTypes = new Set(filter.fileType);
+  return items.filter((item) => fileTypes.has(item.fileType));
 }
