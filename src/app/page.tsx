@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { Button } from "@/components/ui/button";
+import { GoogleSignInLink } from "@/features/auth/components/google-sign-in-link";
 
 export default function Home() {
   return (
@@ -20,7 +20,7 @@ export default function Home() {
             Organize turmas, materiais e prazos do Google Classroom num só lugar.
           </p>
         </div>
-        <Button size="lg">Conectar com Google</Button>
+        <GoogleSignInLink />
       </motion.main>
     </div>
   );
