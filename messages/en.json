@@ -119,7 +119,7 @@
     "tenantPlaceholder": "e.g. cesar",
     "tenantHint": "This is the prefix of your Lyceum portal address (https://<institution>.lyceum.com.br).",
     "connectButton": "Connect with Lyceum",
-    "connectedAs": "Connected as RA {ra}",
+    "connectedAs": "Signed in as {nome} — Student ID {ra}",
     "disconnectButton": "Disconnect",
     "sessionExpiredMessage": "Your Lyceum session has expired. Reconnect to keep accessing grades and academic history.",
     "reconnectButton": "Reconnect with Lyceum",

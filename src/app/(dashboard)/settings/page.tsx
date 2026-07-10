@@ -5,14 +5,14 @@ import { getLyceumClient } from "@/features/lyceum/server/get-lyceum-client";
 import { LyceumSessionExpiredError } from "@/features/lyceum/server/lyceum-client";
 import { Button } from "@/components/ui/button";
 
-async function isLyceumSessionAlive(): Promise<boolean> {
+async function getLyceumStudentInfo(): Promise<{ nome: string } | null> {
   const client = await getLyceumClient();
-  if (!client) return false;
+  if (!client) return null;
   try {
-    await client.getDadosAluno();
-    return true;
+    const dados = (await client.getDadosAluno()) as { neoAluno?: string };
+    return dados.neoAluno ? { nome: dados.neoAluno } : null;
   } catch (error) {
-    if (error instanceof LyceumSessionExpiredError) return false;
+    if (error instanceof LyceumSessionExpiredError) return null;
     throw error;
   }
 }
@@ -25,7 +25,8 @@ export default async function SettingsPage({
   const { error } = await searchParams;
   const t = await getTranslations("settings");
   const connection = loadLyceumCredentials();
-  const sessionAlive = connection ? await isLyceumSessionAlive() : false;
+  const student = connection ? await getLyceumStudentInfo() : null;
+  const sessionAlive = student != null;
 
   return (
     <>
@@ -45,7 +46,7 @@ export default async function SettingsPage({
 
         {connection && sessionAlive ? (
           <div className="flex items-center justify-between gap-4">
-            <p className="text-sm text-foreground">{t("connectedAs", { ra: connection.ra })}</p>
+            <p className="text-sm text-foreground">{t("connectedAs", { nome: student?.nome ?? "", ra: connection.ra })}</p>
             <form action={disconnectLyceumAction}>
               <Button type="submit" variant="destructive">
                 {t("disconnectButton")}
