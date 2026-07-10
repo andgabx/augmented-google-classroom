@@ -2,8 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowLeft } from "lucide-react";
-import { getCourse, listPeriods } from "@/features/courses/server/courses";
-import { setCoursePeriodAction } from "@/features/courses/server/actions";
+import { getCourse } from "@/features/courses/server/courses";
+import { PeriodForm } from "@/features/courses/components/period-form";
 import {
   hasSyncedMaterials,
   listCourseMaterials,
@@ -99,23 +99,7 @@ export default async function CourseMaterialsPage({
           {course.section && (
             <span className="text-sm text-muted-foreground">{course.section}</span>
           )}
-          <form action={setCoursePeriodAction.bind(null, id)} className="flex items-center gap-2 pt-1">
-            <input
-              list="periods-list"
-              name="periodName"
-              defaultValue={course.periodId ?? ""}
-              placeholder="Período (ex: 2024.1)"
-              className="rounded-lg border border-input bg-background px-3 py-1.5 text-xs text-foreground outline-none focus:border-ring"
-            />
-            <datalist id="periods-list">
-              {listPeriods().map((period) => (
-                <option key={period.id} value={period.name} />
-              ))}
-            </datalist>
-            <Button type="submit" variant="outline" size="sm">
-              Salvar período
-            </Button>
-          </form>
+          <PeriodForm courseId={id} periodId={course.periodId} />
         </div>
         <form action={syncCourseMaterialsAction.bind(null, id)}>
           <Button type="submit" variant="outline" size="sm">
