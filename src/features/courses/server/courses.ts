@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { getClassroomClient } from "@/features/courses/server/classroom-client";
+import { getClassroomClient } from "@/lib/classroom";
 import type { Course, CourseState } from "@/features/courses/types/course";
 
 interface CourseRow {
