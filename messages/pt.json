@@ -69,5 +69,36 @@
       "done": "Baixado ✓",
       "error": "Erro"
     }
+  },
+  "signIn": {
+    "tagline": "Organize turmas, materiais e prazos do Google Classroom num só lugar.",
+    "connectButton": "Conectar com Google"
+  },
+  "setup": {
+    "title": "Conectar sua conta Google",
+    "intro": "O Augmented Classroom não tem servidor central — cada instalação usa suas próprias credenciais do Google Cloud. Isso é feito uma única vez, leva uns 5 minutos, e fica salvo localmente.",
+    "step1Title": "Passo 1 — Criar/abrir um projeto",
+    "step1Body": "Acesse o <link>Google Cloud Console</link> e crie um projeto novo (pode chamar de \"Augmented Classroom\"), ou selecione um projeto existente no seletor no topo da página.",
+    "step2Title": "Passo 2 — Ativar as APIs",
+    "step2Body": "Na <link>Library de APIs</link>, busque e clique em <b>Enable</b> para:",
+    "step2Classroom": "Google Classroom API",
+    "step2Drive": "Google Drive API (necessária pra baixar anexos dos materiais)",
+    "step3Title": "Passo 3 — Configurar a tela de consentimento",
+    "step3Body": "Na <link>OAuth consent screen</link>:",
+    "step3UserType": "<b>User type:</b> External (a menos que você tenha Google Workspace).",
+    "step3FillApp": "Preencha nome do app, e-mail de suporte e de contato.",
+    "step3ScopesIntro": "Em <b>Scopes</b>, adicione manualmente:",
+    "step3TestUsers": "Em <b>Test users</b>, adicione o seu próprio e-mail Google. Sem isso, o Google bloqueia o login com o erro \"access blocked: app has not completed verification\" — não é preciso publicar o app nem passar pela verificação formal, só cadastrar os e-mails que vão usá-lo aqui.",
+    "step4Title": "Passo 4 — Criar a credencial OAuth",
+    "step4Body": "Na <link>tela de Credenciais</link>, clique <b>Create Credentials → OAuth client ID</b>:",
+    "step4AppType": "<b>Application type:</b> Web application.",
+    "step4RedirectUri": "Em <b>Authorized redirect URIs</b>, adicione exatamente:",
+    "step4ClientCreate": "Clique <b>Create</b> — um modal vai mostrar o <b>Client ID</b> e o <b>Client Secret</b>.",
+    "step5Title": "Passo 5 — Colar as credenciais",
+    "errorMissingFields": "Preencha os dois campos para continuar.",
+    "errorGeneric": "Algo deu errado, tente novamente.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client Secret",
+    "saveButton": "Salvar e conectar com Google"
   }
 }

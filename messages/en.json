@@ -69,5 +69,36 @@
       "done": "Downloaded ✓",
       "error": "Error"
     }
+  },
+  "signIn": {
+    "tagline": "Organize classes, materials, and deadlines from Google Classroom in one place.",
+    "connectButton": "Connect with Google"
+  },
+  "setup": {
+    "title": "Connect your Google account",
+    "intro": "Augmented Classroom has no central server — each install uses its own Google Cloud credentials. This is done once, takes about 5 minutes, and is saved locally.",
+    "step1Title": "Step 1 — Create/open a project",
+    "step1Body": "Go to the <link>Google Cloud Console</link> and create a new project (you can name it \"Augmented Classroom\"), or select an existing project from the picker at the top of the page.",
+    "step2Title": "Step 2 — Enable the APIs",
+    "step2Body": "In the <link>API Library</link>, search for and click <b>Enable</b> on:",
+    "step2Classroom": "Google Classroom API",
+    "step2Drive": "Google Drive API (needed to download material attachments)",
+    "step3Title": "Step 3 — Configure the consent screen",
+    "step3Body": "In the <link>OAuth consent screen</link>:",
+    "step3UserType": "<b>User type:</b> External (unless you have Google Workspace).",
+    "step3FillApp": "Fill in the app name and the support and contact emails.",
+    "step3ScopesIntro": "Under <b>Scopes</b>, manually add:",
+    "step3TestUsers": "Under <b>Test users</b>, add your own Google email. Without this, Google blocks sign-in with the error \"access blocked: app has not completed verification\" — you do not need to publish the app or complete formal verification, just register the emails that will use it here.",
+    "step4Title": "Step 4 — Create the OAuth credential",
+    "step4Body": "In the <link>Credentials</link> screen, click <b>Create Credentials → OAuth client ID</b>:",
+    "step4AppType": "<b>Application type:</b> Web application.",
+    "step4RedirectUri": "Under <b>Authorized redirect URIs</b>, add exactly:",
+    "step4ClientCreate": "Click <b>Create</b> — a modal will show the <b>Client ID</b> and the <b>Client Secret</b>.",
+    "step5Title": "Step 5 — Paste the credentials",
+    "errorMissingFields": "Fill in both fields to continue.",
+    "errorGeneric": "Something went wrong, try again.",
+    "clientIdLabel": "Client ID",
+    "clientSecretLabel": "Client Secret",
+    "saveButton": "Save and connect with Google"
   }
 }

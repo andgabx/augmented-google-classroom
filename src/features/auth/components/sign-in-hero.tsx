@@ -1,9 +1,12 @@
 "use client";
 
 import { motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import { GoogleSignInLink } from "@/features/auth/components/google-sign-in-link";
 
 export function SignInHero() {
+  const t = useTranslations("signIn");
+
   return (
     <div className="flex flex-1 items-center justify-center bg-background px-6">
       <motion.main
@@ -16,9 +19,7 @@ export function SignInHero() {
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
             Augmented Classroom
           </h1>
-          <p className="text-muted-foreground">
-            Organize turmas, materiais e prazos do Google Classroom num só lugar.
-          </p>
+          <p className="text-muted-foreground">{t("tagline")}</p>
         </div>
         <GoogleSignInLink />
       </motion.main>

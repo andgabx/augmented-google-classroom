@@ -1,8 +1,24 @@
+import { getTranslations } from "next-intl/server";
 import { saveGoogleCredentialsAction } from "@/features/auth/server/actions";
 import { Button } from "@/components/ui/button";
 
-const errorMessages: Record<string, string> = {
-  missing_fields: "Preencha os dois campos para continuar.",
+function externalLink(href: string) {
+  return function ExternalLinkChunk(chunks: React.ReactNode) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-medium text-foreground underline"
+      >
+        {chunks}
+      </a>
+    );
+  };
+}
+
+const richComponents = {
+  b: (chunks: React.ReactNode) => <strong>{chunks}</strong>,
 };
 
 export default async function SetupPage({
@@ -11,87 +27,59 @@ export default async function SetupPage({
   searchParams: Promise<{ error?: string }>;
 }) {
   const { error } = await searchParams;
+  const t = await getTranslations("setup");
 
   return (
     <div className="flex flex-1 items-center justify-center bg-background px-6 py-12">
       <main className="flex w-full max-w-2xl flex-col gap-8 rounded-3xl border border-border bg-card p-10">
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-            Conectar sua conta Google
+            {t("title")}
           </h1>
-          <p className="text-sm text-muted-foreground">
-            O Augmented Classroom não tem servidor central — cada instalação usa
-            suas próprias credenciais do Google Cloud. Isso é feito uma única
-            vez, leva uns 5 minutos, e fica salvo localmente.
-          </p>
+          <p className="text-sm text-muted-foreground">{t("intro")}</p>
         </div>
 
         <section className="flex flex-col gap-3">
           <h2 className="text-sm font-semibold text-foreground">
-            Passo 1 — Criar/abrir um projeto
+            {t("step1Title")}
           </h2>
           <p className="text-sm text-muted-foreground">
-            Acesse o{" "}
-            <a
-              href="https://console.cloud.google.com/projectcreate"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-foreground underline"
-            >
-              Google Cloud Console
-            </a>{" "}
-            e crie um projeto novo (pode chamar de &quot;Augmented
-            Classroom&quot;), ou selecione um projeto existente no seletor no
-            topo da página.
+            {t.rich("step1Body", {
+              link: externalLink("https://console.cloud.google.com/projectcreate"),
+            })}
           </p>
         </section>
 
         <section className="flex flex-col gap-3">
           <h2 className="text-sm font-semibold text-foreground">
-            Passo 2 — Ativar as APIs
+            {t("step2Title")}
           </h2>
           <p className="text-sm text-muted-foreground">
-            Na{" "}
-            <a
-              href="https://console.cloud.google.com/apis/library"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-foreground underline"
-            >
-              Library de APIs
-            </a>
-            , busque e clique em <strong>Enable</strong> para:
+            {t.rich("step2Body", {
+              link: externalLink("https://console.cloud.google.com/apis/library"),
+              ...richComponents,
+            })}
           </p>
           <ul className="flex flex-col gap-1 text-sm text-muted-foreground list-disc list-inside">
-            <li>Google Classroom API</li>
-            <li>Google Drive API (necessária pra baixar anexos dos materiais)</li>
+            <li>{t("step2Classroom")}</li>
+            <li>{t("step2Drive")}</li>
           </ul>
         </section>
 
         <section className="flex flex-col gap-3">
           <h2 className="text-sm font-semibold text-foreground">
-            Passo 3 — Configurar a tela de consentimento
+            {t("step3Title")}
           </h2>
           <p className="text-sm text-muted-foreground">
-            Na{" "}
-            <a
-              href="https://console.cloud.google.com/auth/overview"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-foreground underline"
-            >
-              OAuth consent screen
-            </a>
-            :
+            {t.rich("step3Body", {
+              link: externalLink("https://console.cloud.google.com/auth/overview"),
+            })}
           </p>
           <ul className="flex flex-col gap-1 text-sm text-muted-foreground list-disc list-inside">
+            <li>{t.rich("step3UserType", richComponents)}</li>
+            <li>{t("step3FillApp")}</li>
             <li>
-              <strong>User type:</strong> External (a menos que você tenha
-              Google Workspace).
-            </li>
-            <li>Preencha nome do app, e-mail de suporte e de contato.</li>
-            <li>
-              Em <strong>Scopes</strong>, adicione manualmente:
+              {t.rich("step3ScopesIntro", richComponents)}
               <ul className="mt-1 ml-4 flex flex-col gap-0.5 font-mono text-xs">
                 <li>.../auth/classroom.courses.readonly</li>
                 <li>.../auth/classroom.coursework.me.readonly</li>
@@ -99,58 +87,40 @@ export default async function SetupPage({
                 <li>.../auth/drive.readonly</li>
               </ul>
             </li>
-            <li>
-              Em <strong>Test users</strong>, adicione o seu próprio e-mail
-              Google. Sem isso, o Google bloqueia o login com o erro
-              &quot;access blocked: app has not completed verification&quot;
-              — não é preciso publicar o app nem passar pela verificação
-              formal, só cadastrar os e-mails que vão usá-lo aqui.
-            </li>
+            <li>{t.rich("step3TestUsers", richComponents)}</li>
           </ul>
         </section>
 
         <section className="flex flex-col gap-3">
           <h2 className="text-sm font-semibold text-foreground">
-            Passo 4 — Criar a credencial OAuth
+            {t("step4Title")}
           </h2>
           <p className="text-sm text-muted-foreground">
-            Na{" "}
-            <a
-              href="https://console.cloud.google.com/apis/credentials"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-foreground underline"
-            >
-              tela de Credenciais
-            </a>
-            , clique <strong>Create Credentials → OAuth client ID</strong>:
+            {t.rich("step4Body", {
+              link: externalLink("https://console.cloud.google.com/apis/credentials"),
+              ...richComponents,
+            })}
           </p>
           <ul className="flex flex-col gap-1 text-sm text-muted-foreground list-disc list-inside">
+            <li>{t.rich("step4AppType", richComponents)}</li>
             <li>
-              <strong>Application type:</strong> Web application.
-            </li>
-            <li>
-              Em <strong>Authorized redirect URIs</strong>, adicione
-              exatamente:{" "}
+              {t.rich("step4RedirectUri", richComponents)}{" "}
               <code className="rounded bg-muted px-1">
                 http://localhost:3000/api/auth/callback
               </code>
             </li>
-            <li>
-              Clique <strong>Create</strong> — um modal vai mostrar o{" "}
-              <strong>Client ID</strong> e o <strong>Client Secret</strong>.
-            </li>
+            <li>{t.rich("step4ClientCreate", richComponents)}</li>
           </ul>
         </section>
 
         <section className="flex flex-col gap-4 border-t border-border pt-6">
           <h2 className="text-sm font-semibold text-foreground">
-            Passo 5 — Colar as credenciais
+            {t("step5Title")}
           </h2>
 
           {error && (
             <p className="text-sm text-destructive">
-              {errorMessages[error] ?? "Algo deu errado, tente novamente."}
+              {error === "missing_fields" ? t("errorMissingFields") : t("errorGeneric")}
             </p>
           )}
 
@@ -163,7 +133,7 @@ export default async function SetupPage({
                 htmlFor="clientId"
                 className="text-sm font-medium text-foreground"
               >
-                Client ID
+                {t("clientIdLabel")}
               </label>
               <input
                 id="clientId"
@@ -180,7 +150,7 @@ export default async function SetupPage({
                 htmlFor="clientSecret"
                 className="text-sm font-medium text-foreground"
               >
-                Client Secret
+                {t("clientSecretLabel")}
               </label>
               <input
                 id="clientSecret"
@@ -192,7 +162,7 @@ export default async function SetupPage({
             </div>
 
             <Button type="submit" className="mt-2 self-start">
-              Salvar e conectar com Google
+              {t("saveButton")}
             </Button>
           </form>
         </section>
