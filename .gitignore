@@ -52,6 +52,9 @@ next-env.d.ts
 
 # claude code
 CLAUDE.md
+AGENTS.md
+PRODUCT.md
+DESIGN.md
 .claude/
 skills-lock.json
 .impeccable/
