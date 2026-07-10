@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { getClassroomClient } from "@/lib/classroom";
+import { getClassroomClient, getDriveClient } from "@/lib/classroom";
 import type { classroom_v1 } from "googleapis";
 
 const ALL_POST_STATES = ["PUBLISHED", "DRAFT", "DELETED"];
@@ -186,6 +186,37 @@ async function syncAnnouncements(classroom: classroom_v1.Classroom, courseId: st
   } while (pageToken);
 }
 
+interface PendingDriveMaterial {
+  id: string;
+  drive_file_id: string;
+}
+
+const findPendingDriveMaterials = db.prepare(`
+  SELECT m.id, m.drive_file_id
+  FROM materials m
+  JOIN posts p ON p.id = m.post_id
+  WHERE p.course_id = ? AND m.type = 'DRIVE_FILE' AND m.mime_type IS NULL AND m.drive_file_id IS NOT NULL
+`);
+
+const setMaterialMimeType = db.prepare(`UPDATE materials SET mime_type = ? WHERE id = ?`);
+
+async function resolveMimeTypes(courseId: string, redirectUri: string) {
+  const pending = findPendingDriveMaterials.all(courseId) as unknown as PendingDriveMaterial[];
+  if (pending.length === 0) return;
+
+  const drive = await getDriveClient(redirectUri);
+
+  for (const material of pending) {
+    const { data } = await drive.files.get({
+      fileId: material.drive_file_id,
+      fields: "mimeType",
+    });
+    if (data.mimeType) {
+      setMaterialMimeType.run(data.mimeType, material.id);
+    }
+  }
+}
+
 export async function syncCourseMaterials(courseId: string, redirectUri: string): Promise<void> {
   const classroom = await getClassroomClient(redirectUri);
 
@@ -193,4 +224,5 @@ export async function syncCourseMaterials(courseId: string, redirectUri: string)
   await syncCourseWork(classroom, courseId);
   await syncCourseWorkMaterials(classroom, courseId);
   await syncAnnouncements(classroom, courseId);
+  await resolveMimeTypes(courseId, redirectUri);
 }
