@@ -20,7 +20,9 @@ export function TeacherAvatars({ teachers }: { teachers: CourseTeacher[] }) {
         ))}
       </AvatarGroup>
       <span className="truncate text-xs text-muted-foreground">
-        {teachers.map((teacher) => shortName(teacher.name)).join(", ")}
+        {teachers
+          .map((teacher) => (teacher.isOwner ? `${shortName(teacher.name)} (titular)` : shortName(teacher.name)))
+          .join(", ")}
       </span>
     </div>
   );
