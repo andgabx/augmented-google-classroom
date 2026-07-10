@@ -33,4 +33,5 @@ export interface Course {
   teachers: CourseTeacher[];
   periodId: string | null;
   ownerId: string | null;
+  pendingCount: number;
 }

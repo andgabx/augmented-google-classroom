@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { GraduationCap } from "lucide-react";
+import { ExternalLink, GraduationCap } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { CourseMeta } from "@/features/courses/components/course-meta";
 import { TeacherAvatars } from "@/features/courses/components/teacher-avatars";
 import type { Course } from "@/features/courses/types/course";
 
@@ -22,20 +23,11 @@ export function CourseGridCard({ course }: { course: Course }) {
         aria-label={t("openInClassroom")}
         className="absolute right-2 top-2 z-10 rounded-full bg-background/80 p-1.5 text-muted-foreground backdrop-blur-sm hover:text-foreground"
       >
-        ↗
+        <ExternalLink className="size-3.5" />
       </a>
       <div className="flex flex-col gap-1 p-3">
-        <span className="line-clamp-2 text-sm font-medium text-foreground">{course.name}</span>
-        <div className="flex items-center gap-2">
-          {course.section && (
-            <span className="text-xs text-muted-foreground">{course.section}</span>
-          )}
-          {course.periodId && (
-            <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
-              {course.periodId}
-            </span>
-          )}
-        </div>
+        <span className="line-clamp-2 text-base font-semibold text-foreground">{course.name}</span>
+        <CourseMeta course={course} size="xs" />
         <TeacherAvatars teachers={course.teachers} />
       </div>
     </div>

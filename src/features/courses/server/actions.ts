@@ -6,9 +6,21 @@ import { getTranslations } from "next-intl/server";
 import { setCoursePeriod, syncCourses } from "@/features/courses/server/courses";
 import { getCallbackRedirectUri } from "@/lib/redirect-uri";
 
-export async function syncCoursesAction() {
-  await syncCourses(await getCallbackRedirectUri());
-  revalidatePath("/courses");
+export interface SyncCoursesState {
+  success: boolean;
+  message: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- required by useActionState's signature
+export async function syncCoursesAction(_prevState: SyncCoursesState): Promise<SyncCoursesState> {
+  const t = await getTranslations("courses");
+  try {
+    await syncCourses(await getCallbackRedirectUri());
+    revalidatePath("/courses");
+    return { success: true, message: t("syncSuccess") };
+  } catch {
+    return { success: false, message: t("syncError") };
+  }
 }
 
 const coursePeriodSchema = z.object({

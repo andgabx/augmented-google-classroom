@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { ViewItems, ViewToggle, type ViewMode } from "@/components/view-toggle";
 import { CourseCard } from "@/features/courses/components/course-card";
 import { CourseGridCard } from "@/features/courses/components/course-grid-card";
+import { SyncCoursesButton } from "@/features/courses/components/sync-courses-button";
 import type { Course } from "@/features/courses/types/course";
 
 export function CoursesView({ active, archived }: { active: Course[]; archived: Course[] }) {
@@ -32,7 +33,13 @@ export function CoursesView({ active, archived }: { active: Course[]; archived: 
           {t("active", { count: active.length })}
         </h2>
         {active.length === 0 ? (
-          <p className="text-sm text-muted-foreground">{t("noActiveClasses")}</p>
+          <div className="flex flex-col items-start gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm">
+            <div className="flex flex-col gap-1">
+              <p className="text-sm text-foreground">{t("noActiveClasses")}</p>
+              <p className="text-sm text-muted-foreground">{t("noActiveClassesHint")}</p>
+            </div>
+            <SyncCoursesButton />
+          </div>
         ) : (
           renderCourses(active)
         )}

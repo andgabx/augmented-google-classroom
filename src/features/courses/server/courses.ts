@@ -22,6 +22,16 @@ const selectTeachersByCourse = db.prepare(`
   ORDER BY (teacher_id = ?) DESC, name
 `);
 
+const selectPendingCount = db.prepare(`
+  SELECT COUNT(*) as count FROM posts
+  WHERE course_id = ? AND category = 'TAREFA' AND state = 'PUBLISHED' AND due_date >= date('now')
+`);
+
+function getPendingCount(courseId: string): number {
+  const row = selectPendingCount.get(courseId) as unknown as { count: number };
+  return row.count;
+}
+
 function getCourseTeachers(courseId: string, ownerId: string | null): CourseTeacher[] {
   const rows = selectTeachersByCourse.all(courseId, ownerId ?? "") as unknown as {
     teacher_id: string;
@@ -48,6 +58,7 @@ function toCourse(row: CourseRow): Course {
     teachers: getCourseTeachers(row.id, row.owner_id),
     periodId: row.period_id,
     ownerId: row.owner_id,
+    pendingCount: getPendingCount(row.id),
   };
 }
 
