@@ -3,5 +3,18 @@
     "language": "Language",
     "portuguese": "Português",
     "english": "English"
+  },
+  "sidebar": {
+    "classes": "Classes",
+    "downloads": "Downloads",
+    "connected": "Connected",
+    "userAvatarAlt": "User",
+    "signOut": "Sign out",
+    "collapse": "Collapse",
+    "clearCredentials": "Clear credentials",
+    "clearCredentialsTitle": "Clear Google credentials?",
+    "clearCredentialsDescription": "This deletes the locally saved Client ID/Secret and access token. You will be signed out now and will need to redo the Google credentials setup to use the app again. Classes and materials already synced remain in the local database.",
+    "cancel": "Cancel",
+    "confirm": "Clear"
   }
 }

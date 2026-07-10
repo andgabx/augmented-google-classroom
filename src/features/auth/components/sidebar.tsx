@@ -28,9 +28,9 @@ interface SidebarUser {
   picture: string | null;
 }
 
-const NAV_ITEMS: { href: string; label: string; icon: ComponentType<{ className?: string }> }[] = [
-  { href: "/courses", label: "Turmas", icon: GraduationCap },
-  { href: "/downloads", label: "Downloads", icon: Download },
+const NAV_ITEMS: { href: string; key: "classes" | "downloads"; icon: ComponentType<{ className?: string }> }[] = [
+  { href: "/courses", key: "classes", icon: GraduationCap },
+  { href: "/downloads", key: "downloads", icon: Download },
 ];
 
 const LABEL_MOTION = {
@@ -46,6 +46,7 @@ export function Sidebar({ user }: { user: SidebarUser }) {
   const router = useRouter();
   const initial = (user.name ?? user.email ?? "?").charAt(0).toUpperCase();
   const t = useTranslations("common");
+  const tSidebar = useTranslations("sidebar");
   const locale = useLocale();
   const [isPending, startTransition] = useTransition();
 
@@ -78,7 +79,7 @@ export function Sidebar({ user }: { user: SidebarUser }) {
       </div>
 
       <div className="space-y-1">
-        {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+        {NAV_ITEMS.map(({ href, key, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(`${href}/`);
           return (
             <Link
@@ -96,7 +97,7 @@ export function Sidebar({ user }: { user: SidebarUser }) {
               <AnimatePresence>
                 {open && (
                   <motion.span {...LABEL_MOTION} className="whitespace-nowrap text-sm font-medium">
-                    {label}
+                    {tSidebar(key)}
                   </motion.span>
                 )}
               </AnimatePresence>
@@ -110,7 +111,7 @@ export function Sidebar({ user }: { user: SidebarUser }) {
           <Avatar size="lg" className="shrink-0">
             <AvatarImage
               src={user.picture ?? undefined}
-              alt={user.name ?? "Usuário"}
+              alt={user.name ?? tSidebar("userAvatarAlt")}
               referrerPolicy="no-referrer"
             />
             <AvatarFallback>{initial}</AvatarFallback>
@@ -119,7 +120,7 @@ export function Sidebar({ user }: { user: SidebarUser }) {
             {open && (
               <motion.div {...LABEL_MOTION} className="ml-2 flex min-w-0 flex-col">
                 <span className="truncate text-xs font-medium text-sidebar-foreground">
-                  {user.name ? shortName(user.name) : "Conectado"}
+                  {user.name ? shortName(user.name) : tSidebar("connected")}
                 </span>
                 <span className="truncate text-xs text-sidebar-foreground/60">{user.email}</span>
               </motion.div>
@@ -156,7 +157,7 @@ export function Sidebar({ user }: { user: SidebarUser }) {
             <AnimatePresence>
               {open && (
                 <motion.span {...LABEL_MOTION} className="whitespace-nowrap text-sm font-medium">
-                  Sair
+                  {tSidebar("signOut")}
                 </motion.span>
               )}
             </AnimatePresence>
@@ -171,26 +172,21 @@ export function Sidebar({ user }: { user: SidebarUser }) {
             <AnimatePresence>
               {open && (
                 <motion.span {...LABEL_MOTION} className="whitespace-nowrap text-sm font-medium">
-                  Limpar credenciais
+                  {tSidebar("clearCredentials")}
                 </motion.span>
               )}
             </AnimatePresence>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Limpar credenciais do Google?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Isso apaga o Client ID/Secret e o token de acesso salvos localmente. Você será
-                desconectado agora e precisará refazer a configuração de credenciais do Google
-                para voltar a usar o aplicativo. Turmas e materiais já sincronizados continuam no
-                banco local.
-              </AlertDialogDescription>
+              <AlertDialogTitle>{tSidebar("clearCredentialsTitle")}</AlertDialogTitle>
+              <AlertDialogDescription>{tSidebar("clearCredentialsDescription")}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancelar</AlertDialogCancel>
+              <AlertDialogCancel>{tSidebar("cancel")}</AlertDialogCancel>
               <form action={clearCredentialsAction}>
                 <AlertDialogAction type="submit" variant="destructive">
-                  Limpar
+                  {tSidebar("confirm")}
                 </AlertDialogAction>
               </form>
             </AlertDialogFooter>
@@ -208,7 +204,7 @@ export function Sidebar({ user }: { user: SidebarUser }) {
           <AnimatePresence>
             {open && (
               <motion.span {...LABEL_MOTION} className="whitespace-nowrap text-sm font-medium">
-                Recolher
+                {tSidebar("collapse")}
               </motion.span>
             )}
           </AnimatePresence>

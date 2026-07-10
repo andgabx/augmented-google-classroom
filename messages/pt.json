@@ -3,5 +3,18 @@
     "language": "Idioma",
     "portuguese": "Português",
     "english": "English"
+  },
+  "sidebar": {
+    "classes": "Turmas",
+    "downloads": "Downloads",
+    "connected": "Conectado",
+    "userAvatarAlt": "Usuário",
+    "signOut": "Sair",
+    "collapse": "Recolher",
+    "clearCredentials": "Limpar credenciais",
+    "clearCredentialsTitle": "Limpar credenciais do Google?",
+    "clearCredentialsDescription": "Isso apaga o Client ID/Secret e o token de acesso salvos localmente. Você será desconectado agora e precisará refazer a configuração de credenciais do Google para voltar a usar o aplicativo. Turmas e materiais já sincronizados continuam no banco local.",
+    "cancel": "Cancelar",
+    "confirm": "Limpar"
   }
 }
