@@ -23,4 +23,15 @@ db.exec(`
     client_secret TEXT NOT NULL,
     updated_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS courses (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    section TEXT,
+    room TEXT,
+    course_state TEXT NOT NULL,
+    alternate_link TEXT NOT NULL,
+    creation_time TEXT,
+    update_time TEXT
+  );
 `);
