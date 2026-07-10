@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState, type ComponentType } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useState, useTransition, type ComponentType } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ChevronsRight, Download, GraduationCap, LogOut, Trash2 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
+import { ChevronsRight, Download, GraduationCap, Globe, LogOut, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,6 +19,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { clearCredentialsAction, logoutAction } from "@/features/auth/server/actions";
+import { setUserLocale, type Locale } from "@/i18n/locale";
 import { shortName } from "@/lib/utils";
 
 interface SidebarUser {
@@ -41,7 +43,19 @@ const LABEL_MOTION = {
 export function Sidebar({ user }: { user: SidebarUser }) {
   const [open, setOpen] = useState(true);
   const pathname = usePathname();
+  const router = useRouter();
   const initial = (user.name ?? user.email ?? "?").charAt(0).toUpperCase();
+  const t = useTranslations("common");
+  const locale = useLocale();
+  const [isPending, startTransition] = useTransition();
+
+  function toggleLocale() {
+    const next: Locale = locale === "pt" ? "en" : "pt";
+    startTransition(async () => {
+      await setUserLocale(next);
+      router.refresh();
+    });
+  }
 
   return (
     <motion.nav
@@ -112,6 +126,24 @@ export function Sidebar({ user }: { user: SidebarUser }) {
             )}
           </AnimatePresence>
         </div>
+
+        <button
+          type="button"
+          onClick={toggleLocale}
+          disabled={isPending}
+          className="flex h-10 w-full items-center overflow-hidden rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/60"
+        >
+          <div className="grid size-10 shrink-0 place-content-center">
+            <Globe className="size-5" />
+          </div>
+          <AnimatePresence>
+            {open && (
+              <motion.span {...LABEL_MOTION} className="whitespace-nowrap text-sm font-medium">
+                {locale === "pt" ? t("portuguese") : t("english")}
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </button>
 
         <form action={logoutAction}>
           <button

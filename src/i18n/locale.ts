@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 export type Locale = "pt" | "en";
 
@@ -15,4 +16,5 @@ export async function getUserLocale(): Promise<Locale> {
 export async function setUserLocale(locale: Locale) {
   const cookieStore = await cookies();
   cookieStore.set(COOKIE_NAME, locale);
+  revalidatePath("/", "layout");
 }
