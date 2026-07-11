@@ -28,7 +28,7 @@ export function ThemeToggle({ open }: { open: boolean }) {
     <StaggeredDropdown
       side="right"
       align="start"
-      triggerClassName="h-10 w-full overflow-hidden rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/60"
+      triggerClassName={`h-10 w-full overflow-hidden rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/60 ${open ? "" : "justify-center"}`}
       trigger={
         <>
           <div className="grid size-10 shrink-0 place-content-center">

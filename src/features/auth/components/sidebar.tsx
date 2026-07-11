@@ -79,7 +79,9 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
       transition={{ duration: 0.2, ease: "easeInOut" }}
       className="sticky top-3 m-3 flex h-[calc(100vh-1.5rem)] shrink-0 flex-col rounded-2xl bg-sidebar p-2 shadow-lg"
     >
-      <div className="mb-3 flex items-center gap-2 border-b border-sidebar-border/60 pb-3">
+      <div
+        className={`mb-3 flex items-center gap-2 border-b border-sidebar-border/60 pb-3 ${open ? "" : "justify-center"}`}
+      >
         <div className="grid size-10 shrink-0 place-content-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
           <GraduationCap className="size-5" />
         </div>
@@ -102,7 +104,7 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
             <Link
               key={href}
               href={href}
-              className={`flex h-10 items-center overflow-hidden rounded-md transition-colors ${
+              className={`flex h-10 items-center overflow-hidden rounded-md transition-colors ${open ? "" : "justify-center"} ${
                 active
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
                   : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
@@ -129,7 +131,7 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
       {lyceumConnected && (
         <div className="space-y-1">
           <div
-            className={`flex h-10 w-full items-center overflow-hidden rounded-md transition-colors ${
+            className={`flex h-10 w-full items-center overflow-hidden rounded-md transition-colors ${open ? "" : "justify-center"} ${
               lyceumActive
                 ? "bg-sidebar-accent text-sidebar-accent-foreground"
                 : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
@@ -184,7 +186,7 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
       )}
 
       <div className="mt-auto flex flex-col gap-1 border-t border-sidebar-border/60 pt-2">
-        <div className="flex h-12 items-center overflow-hidden rounded-md px-0.5">
+        <div className={`flex h-12 items-center overflow-hidden rounded-md px-0.5 ${open ? "" : "justify-center"}`}>
           <Avatar size="lg" className="shrink-0">
             <AvatarImage
               src={user.picture ?? undefined}
@@ -209,7 +211,7 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
           type="button"
           onClick={toggleLocale}
           disabled={isPending}
-          className="flex h-10 w-full items-center overflow-hidden rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/60"
+          className={`flex h-10 w-full items-center overflow-hidden rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/60 ${open ? "" : "justify-center"}`}
         >
           <div className="grid size-10 shrink-0 place-content-center">
             <Globe className="size-5" />
@@ -228,7 +230,7 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
         <form action={logoutAction}>
           <button
             type="submit"
-            className="flex h-10 w-full items-center overflow-hidden rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/60"
+            className={`flex h-10 w-full items-center overflow-hidden rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/60 ${open ? "" : "justify-center"}`}
           >
             <div className="grid size-10 shrink-0 place-content-center">
               <LogOut className="size-5" />
@@ -244,7 +246,7 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
         </form>
 
         <AlertDialog>
-          <AlertDialogTrigger className="flex h-10 w-full items-center overflow-hidden rounded-md text-destructive transition-colors hover:bg-destructive/10">
+          <AlertDialogTrigger className={`flex h-10 w-full items-center overflow-hidden rounded-md text-destructive transition-colors hover:bg-destructive/10 ${open ? "" : "justify-center"}`}>
             <div className="grid size-10 shrink-0 place-content-center">
               <Trash2 className="size-5" />
             </div>
@@ -275,7 +277,7 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
         <button
           type="button"
           onClick={() => setOpen((value) => !value)}
-          className="flex h-10 w-full items-center overflow-hidden rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/60"
+          className={`flex h-10 w-full items-center overflow-hidden rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/60 ${open ? "" : "justify-center"}`}
         >
           <div className="grid size-10 shrink-0 place-content-center">
             <ChevronsRight className={`size-5 transition-transform ${open ? "rotate-180" : ""}`} />
