@@ -67,6 +67,13 @@ export async function syncCourses(redirectUri: string): Promise<void> {
   } while (pageToken);
 }
 
+const selectCourseById = db.prepare(`SELECT * FROM courses WHERE id = ?`);
+
+export function getCourse(id: string): Course | null {
+  const row = selectCourseById.get(id) as unknown as CourseRow | undefined;
+  return row ? toCourse(row) : null;
+}
+
 export interface ListCoursesFilter {
   state?: CourseState;
   query?: string;
