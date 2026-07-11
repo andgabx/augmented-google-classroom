@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" fill="none">
+  <rect x="0" y="0" width="1200" height="300" rx="28" fill="#1c1917"/>
+  <g transform="translate(80,70) scale(4)">
+    <rect x="3" y="11" width="26" height="26" rx="9" fill="#f2f1ef" stroke="#e7e5e2" stroke-width="1"/>
+    <rect x="11" y="3" width="26" height="26" rx="9" fill="#a8481f"/>
+  </g>
+  <text x="280" y="178" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="72" font-weight="600" letter-spacing="-1.4" fill="#fdfbfa">Augmented Classroom</text>
+</svg>

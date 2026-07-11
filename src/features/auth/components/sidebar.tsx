@@ -6,6 +6,7 @@ import { useState, useTransition, type ComponentType } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLocale, useTranslations } from "next-intl";
 import { ChevronDown, ChevronsRight, Download, GraduationCap, Globe, LogOut, Settings, Trash2 } from "lucide-react";
+import { BrandMark } from "@/components/brand-mark";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -82,9 +83,7 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
       <div
         className={`mb-3 flex items-center gap-2 border-b border-sidebar-border/60 pb-3 ${open ? "" : "justify-center"}`}
       >
-        <div className="grid size-10 shrink-0 place-content-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-          <GraduationCap className="size-5" />
-        </div>
+        <BrandMark className="size-10 shrink-0" />
         <AnimatePresence>
           {open && (
             <motion.span

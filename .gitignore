@@ -58,3 +58,6 @@ DESIGN.md
 .claude/
 skills-lock.json
 .impeccable/
+
+# design specs / planning docs (local-only, not part of the shipped project)
+/docs/
