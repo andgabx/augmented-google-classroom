@@ -29,8 +29,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LocaleToggle } from "@/features/auth/components/locale-toggle";
-import { ThemeToggle } from "@/features/auth/components/theme-toggle";
 import { clearCredentialsAction, logoutAction } from "@/features/auth/server/actions";
 import { shortName } from "@/lib/utils";
 
@@ -211,18 +209,6 @@ export function Sidebar({
       </div>
 
       <div className="mt-auto flex flex-col gap-1 border-t border-sidebar-border/60 pt-2">
-        {open ? (
-          <div className="flex items-center justify-center gap-3 py-1">
-            <ThemeToggle open={open} />
-            <LocaleToggle open={open} />
-          </div>
-        ) : (
-          <>
-            <ThemeToggle open={open} />
-            <LocaleToggle open={open} />
-          </>
-        )}
-
         <div className={`flex h-12 items-center overflow-hidden rounded-md px-0.5 ${open ? "" : "justify-center"}`}>
           <Avatar size="lg" className="shrink-0">
             <AvatarImage
