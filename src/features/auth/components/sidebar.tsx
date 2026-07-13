@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useState, useTransition, type ComponentType } from "react";
+import { usePathname } from "next/navigation";
+import { useState, type ComponentType } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useLocale, useTranslations } from "next-intl";
-import { ChevronDown, ChevronsRight, Download, GraduationCap, Globe, LogOut, Settings, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { ChevronDown, ChevronsRight, Download, GraduationCap, LogOut, Settings, Trash2 } from "lucide-react";
 import { BrandMark } from "@/components/brand-mark";
 import {
   AlertDialog,
@@ -19,9 +19,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LocaleToggle } from "@/features/auth/components/locale-toggle";
 import { ThemeToggle } from "@/features/auth/components/theme-toggle";
 import { clearCredentialsAction, logoutAction } from "@/features/auth/server/actions";
-import { setUserLocale, type Locale } from "@/i18n/locale";
 import { shortName } from "@/lib/utils";
 
 interface SidebarUser {
@@ -58,20 +58,8 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
   const [lyceumOpen, setLyceumOpen] = useState(false);
   const pathname = usePathname();
   const lyceumActive = LYCEUM_SUBITEMS.some(({ href }) => pathname === href || pathname.startsWith(`${href}/`));
-  const router = useRouter();
   const initial = (user.name ?? user.email ?? "?").charAt(0).toUpperCase();
-  const t = useTranslations("common");
   const tSidebar = useTranslations("sidebar");
-  const locale = useLocale();
-  const [isPending, startTransition] = useTransition();
-
-  function toggleLocale() {
-    const next: Locale = locale === "pt" ? "en" : "pt";
-    startTransition(async () => {
-      await setUserLocale(next);
-      router.refresh();
-    });
-  }
 
   return (
     <motion.nav
@@ -185,6 +173,18 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
       )}
 
       <div className="mt-auto flex flex-col gap-1 border-t border-sidebar-border/60 pt-2">
+        {open ? (
+          <div className="flex items-center justify-center gap-3 py-1">
+            <ThemeToggle open={open} />
+            <LocaleToggle open={open} />
+          </div>
+        ) : (
+          <>
+            <ThemeToggle open={open} />
+            <LocaleToggle open={open} />
+          </>
+        )}
+
         <div className={`flex h-12 items-center overflow-hidden rounded-md px-0.5 ${open ? "" : "justify-center"}`}>
           <Avatar size="lg" className="shrink-0">
             <AvatarImage
@@ -205,26 +205,6 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
             )}
           </AnimatePresence>
         </div>
-
-        <button
-          type="button"
-          onClick={toggleLocale}
-          disabled={isPending}
-          className={`flex h-10 w-full items-center overflow-hidden rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/60 ${open ? "" : "justify-center"}`}
-        >
-          <div className="grid size-10 shrink-0 place-content-center">
-            <Globe className="size-5" />
-          </div>
-          <AnimatePresence>
-            {open && (
-              <motion.span {...LABEL_MOTION} className="whitespace-nowrap text-sm font-medium">
-                {locale === "pt" ? t("portuguese") : t("english")}
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </button>
-
-        <ThemeToggle open={open} />
 
         <form action={logoutAction}>
           <button

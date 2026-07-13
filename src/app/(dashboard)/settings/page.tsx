@@ -31,7 +31,7 @@ export default async function SettingsPage({
 
   return (
     <>
-      <h1 className="text-2xl font-semibold tracking-tight text-foreground">{t("title")}</h1>
+      <h1 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">{t("title")}</h1>
 
       <section className="flex max-w-xl flex-col gap-4 rounded-2xl bg-card p-6 shadow-sm">
         <div className="flex items-center gap-3">

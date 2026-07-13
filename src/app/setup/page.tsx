@@ -30,10 +30,10 @@ export default async function SetupPage({
   const t = await getTranslations("setup");
 
   return (
-    <div className="flex flex-1 items-center justify-center bg-background px-6 py-12">
-      <main className="flex w-full max-w-2xl flex-col gap-8 rounded-3xl bg-card p-10 shadow-lg">
+    <div className="flex flex-1 items-center justify-center bg-background px-4 py-8 sm:px-6 sm:py-12">
+      <main className="flex w-full max-w-2xl flex-col gap-6 rounded-3xl bg-card p-6 shadow-lg sm:gap-8 sm:p-10">
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+          <h1 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
             {t("title")}
           </h1>
           <p className="text-sm text-muted-foreground">{t("intro")}</p>

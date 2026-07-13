@@ -33,7 +33,7 @@ export function DynamicTable({
         <thead>
           <tr className="border-b border-border text-xs font-medium text-muted-foreground">
             {columns.map((col) => (
-              <th key={col} className="px-4 py-3 text-left font-medium">
+              <th key={col} className="px-3 py-2 text-left font-medium sm:px-4 sm:py-3">
                 {formatLabel(col)}
               </th>
             ))}
@@ -49,7 +49,7 @@ export function DynamicTable({
               className={`text-sm ${index % 2 ? "bg-muted/40" : ""}`}
             >
               {columns.map((col) => (
-                <td key={col} className="px-4 py-3 text-foreground">
+                <td key={col} className="px-3 py-2 text-foreground sm:px-4 sm:py-3">
                   {formatValue(row[col], col)}
                 </td>
               ))}

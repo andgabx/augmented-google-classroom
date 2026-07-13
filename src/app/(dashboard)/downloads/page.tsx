@@ -11,7 +11,7 @@ export default async function DownloadsPage() {
   return (
     <>
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">{t("title")}</h1>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">{t("title")}</h1>
         {downloads.length > 0 && <ClearDownloadsButton />}
       </div>
       <DownloadsList initialDownloads={downloads} />

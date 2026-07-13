@@ -14,7 +14,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen overflow-hidden">
       <Sidebar
         user={{
           name: session.name ?? null,
@@ -23,8 +23,8 @@ export default async function DashboardLayout({
         }}
         lyceumConnected={hasLyceumCredentials()}
       />
-      <main className="flex-1 overflow-y-auto">
-        <div className="flex w-full flex-col gap-8 px-6 py-12 lg:px-10">{children}</div>
+      <main className="flex-1 overflow-y-auto overscroll-contain">
+        <div className="flex w-full flex-col gap-6 px-4 py-8 sm:gap-8 sm:px-6 sm:py-12 lg:px-10">{children}</div>
       </main>
     </div>
   );

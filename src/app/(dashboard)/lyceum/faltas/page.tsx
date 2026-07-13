@@ -26,7 +26,7 @@ export default async function LyceumFaltasPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold tracking-tight text-foreground">{t("faltasTitle")}</h1>
+      <h1 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">{t("faltasTitle")}</h1>
       <p className="text-sm text-muted-foreground">{t("faltasNote")}</p>
       <FilterablePeriodTable
         data={content}

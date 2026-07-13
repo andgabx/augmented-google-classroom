@@ -62,7 +62,7 @@ export default async function LyceumBoletimPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold tracking-tight text-foreground">{t("boletimTitle")}</h1>
+      <h1 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">{t("boletimTitle")}</h1>
       <p className="text-sm text-muted-foreground">{t("boletimCurrentOnlyNote")}</p>
 
       <section className="flex flex-col gap-2">

@@ -27,7 +27,7 @@ export default async function LyceumHistoricoPage() {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold tracking-tight text-foreground">{t("historicoTitle")}</h1>
+      <h1 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">{t("historicoTitle")}</h1>
       <KeyValuePanel data={data.cabecalho} emptyLabel={t("emptyData")} excludeKeys={COMMON_EXCLUDED_FIELDS} />
       <FilterablePeriodTable
         data={data.historico}
