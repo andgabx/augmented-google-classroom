@@ -153,6 +153,7 @@ addColumnIfMissing("courses", "period_manual", "INTEGER NOT NULL DEFAULT 0");
 addColumnIfMissing("courses", "owner_id", "TEXT");
 addColumnIfMissing("posts", "submission_state", "TEXT");
 addColumnIfMissing("posts", "late", "INTEGER NOT NULL DEFAULT 0");
+addColumnIfMissing("lyceum_session", "valid", "INTEGER NOT NULL DEFAULT 1");
 
 interface LegacyPostRow {
   id: string;

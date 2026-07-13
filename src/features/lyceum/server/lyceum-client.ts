@@ -1,3 +1,5 @@
+import { markLyceumSessionInvalid, markLyceumSessionValid } from "@/features/lyceum/server/session";
+
 function baseUrl(tenant: string): string {
   return `https://${tenant}.lyceum.com.br`;
 }
@@ -51,6 +53,7 @@ export class LyceumApiClient {
     }
 
     if (res.status === 302 || res.status === 301 || res.status === 401) {
+      markLyceumSessionInvalid();
       throw new LyceumSessionExpiredError();
     }
     if (!res.ok) {
@@ -63,6 +66,7 @@ export class LyceumApiClient {
       throw new Error(`HTTP ${res.status} em ${path}${body ? ` — ${body.substring(0, 200)}` : ""}`);
     }
 
+    markLyceumSessionValid();
     const text = await res.text();
     return JSON.parse(repairMojibake(text)) as T;
   }

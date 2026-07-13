@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/features/auth/server/session";
-import { hasLyceumCredentials } from "@/features/lyceum/server/credentials";
+import { getLyceumConnectionStatus } from "@/features/lyceum/server/session";
 import { Sidebar } from "@/features/auth/components/sidebar";
 
 export default async function DashboardLayout({
@@ -21,7 +21,7 @@ export default async function DashboardLayout({
           email: session.email ?? null,
           picture: session.picture ?? null,
         }}
-        lyceumConnected={hasLyceumCredentials()}
+        lyceumStatus={getLyceumConnectionStatus()}
       />
       <main className="flex-1 overflow-y-auto overscroll-contain">
         <div className="flex w-full flex-col gap-6 px-4 py-8 sm:gap-8 sm:px-6 sm:py-12 lg:px-10">{children}</div>

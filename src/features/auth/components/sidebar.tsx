@@ -68,11 +68,18 @@ const LABEL_MOTION = {
   transition: { duration: 0.15 },
 } as const;
 
-export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumConnected: boolean }) {
+export function Sidebar({
+  user,
+  lyceumStatus,
+}: {
+  user: SidebarUser;
+  lyceumStatus: "connected" | "expired" | "disconnected";
+}) {
   const [open, setOpen] = useState(true);
   const [lyceumOpen, setLyceumOpen] = useState(false);
   const pathname = usePathname();
   const lyceumActive = LYCEUM_SUBITEMS.some(({ href }) => pathname === href || pathname.startsWith(`${href}/`));
+  const lyceumConnected = lyceumStatus === "connected";
   const initial = (user.name ?? user.email ?? "?").charAt(0).toUpperCase();
   const tSidebar = useTranslations("sidebar");
 
@@ -130,27 +137,43 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
 
       <div className="space-y-1">{NAV_ITEMS.map(renderNavItem)}</div>
 
-      {lyceumConnected && (
-        <div className="space-y-1">
-          <div
-            className={`flex h-10 w-full items-center overflow-hidden rounded-md transition-colors ${open ? "" : "justify-center"} ${
-              lyceumActive
+      <div className="space-y-1">
+        {open && (
+          <p className="px-2 pt-2 text-xs font-medium tracking-wide text-sidebar-foreground/40 uppercase">
+            {tSidebar("integrations")}
+          </p>
+        )}
+
+        <div
+          className={`flex h-10 w-full items-center overflow-hidden rounded-md transition-colors ${open ? "" : "justify-center"} ${
+            !lyceumConnected
+              ? "text-sidebar-foreground/40"
+              : lyceumActive
                 ? "bg-sidebar-accent text-sidebar-accent-foreground"
                 : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
-            }`}
+          }`}
+        >
+          <Link
+            href={lyceumConnected ? LYCEUM_SUBITEMS[0].href : "/settings"}
+            className="grid size-10 shrink-0 place-content-center"
           >
-            <Link href={LYCEUM_SUBITEMS[0].href} className="grid size-10 shrink-0 place-content-center">
-              <GraduationCap className="size-5" strokeWidth={lyceumActive ? 2.25 : 2} />
-            </Link>
-            <AnimatePresence>
-              {open && (
-                <motion.span {...LABEL_MOTION} className="flex flex-1 items-center pr-1">
-                  <Link
-                    href={LYCEUM_SUBITEMS[0].href}
-                    className={`flex-1 whitespace-nowrap text-sm ${lyceumActive ? "font-semibold" : "font-medium"}`}
-                  >
-                    Lyceum
-                  </Link>
+            <GraduationCap className="size-5" strokeWidth={lyceumConnected && lyceumActive ? 2.25 : 2} />
+          </Link>
+          <AnimatePresence>
+            {open && (
+              <motion.span {...LABEL_MOTION} className="flex flex-1 items-center pr-1">
+                <Link
+                  href={lyceumConnected ? LYCEUM_SUBITEMS[0].href : "/settings"}
+                  className={`flex-1 whitespace-nowrap text-sm ${lyceumConnected && lyceumActive ? "font-semibold" : "font-medium"}`}
+                >
+                  Lyceum
+                  {lyceumStatus === "expired" && (
+                    <span className="ml-1.5 text-xs font-normal text-sidebar-foreground/40">
+                      ({tSidebar("lyceumExpired")})
+                    </span>
+                  )}
+                </Link>
+                {lyceumConnected && (
                   <button
                     type="button"
                     onClick={() => setLyceumOpen((value) => !value)}
@@ -159,33 +182,33 @@ export function Sidebar({ user, lyceumConnected }: { user: SidebarUser; lyceumCo
                   >
                     <ChevronDown className={`size-4 transition-transform ${lyceumOpen ? "rotate-180" : ""}`} />
                   </button>
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {open && lyceumOpen && (
-            <div className="flex flex-col gap-1 pl-10">
-              {LYCEUM_SUBITEMS.map(({ href, key }) => {
-                const active = pathname === href || pathname.startsWith(`${href}/`);
-                return (
-                  <Link
-                    key={href}
-                    href={href}
-                    className={`flex h-9 items-center whitespace-nowrap rounded-md px-2 text-sm transition-colors ${
-                      active
-                        ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground"
-                        : "font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
-                    }`}
-                  >
-                    {tSidebar(key)}
-                  </Link>
-                );
-              })}
-            </div>
-          )}
+                )}
+              </motion.span>
+            )}
+          </AnimatePresence>
         </div>
-      )}
+
+        {lyceumConnected && open && lyceumOpen && (
+          <div className="flex flex-col gap-1 pl-10">
+            {LYCEUM_SUBITEMS.map(({ href, key }) => {
+              const active = pathname === href || pathname.startsWith(`${href}/`);
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`flex h-9 items-center whitespace-nowrap rounded-md px-2 text-sm transition-colors ${
+                    active
+                      ? "bg-sidebar-accent font-semibold text-sidebar-accent-foreground"
+                      : "font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
+                  }`}
+                >
+                  {tSidebar(key)}
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
 
       <div className="space-y-1">{renderNavItem(SETTINGS_ITEM)}</div>
 
