@@ -47,8 +47,8 @@ type NavItem = {
 };
 
 const NAV_ITEMS: NavItem[] = [
-  { href: "/courses", key: "classes", icon: GraduationCap },
   { href: "/feed", key: "feed", icon: Rss },
+  { href: "/courses", key: "classes", icon: GraduationCap },
   { href: "/deadlines", key: "deadlines", icon: ListChecks },
   { href: "/downloads", key: "downloads", icon: Download },
 ];
@@ -210,8 +210,6 @@ export function Sidebar({
         )}
       </div>
 
-      <div className="space-y-1">{renderNavItem(SETTINGS_ITEM)}</div>
-
       <div className="mt-auto flex flex-col gap-1 border-t border-sidebar-border/60 pt-2">
         {open ? (
           <div className="flex items-center justify-center gap-3 py-1">
@@ -245,6 +243,8 @@ export function Sidebar({
             )}
           </AnimatePresence>
         </div>
+
+        {renderNavItem(SETTINGS_ITEM)}
 
         <form action={logoutAction}>
           <button
