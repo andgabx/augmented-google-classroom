@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { getClassroomClient, getDriveClient } from "@/lib/classroom";
 import { indexCourseMaterialsContent } from "@/features/materials/server/index-content";
+import { fileTypeGroup } from "@/features/materials/lib/file-type-group";
 import { searchPosts, upsertPostSearchEntry } from "@/lib/search-posts";
 import type { classroom_v1 } from "googleapis";
 import type {
@@ -340,30 +341,6 @@ export function listTopics(courseId: string): Topic[] {
     name: row.name,
     updateTime: row.update_time,
   }));
-}
-
-const MIME_GROUPS: Record<string, FileTypeGroup> = {
-  "application/pdf": "PDF",
-  "application/vnd.google-apps.document": "WORD",
-  "application/msword": "WORD",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "WORD",
-  "application/vnd.google-apps.presentation": "SLIDES",
-  "application/vnd.ms-powerpoint": "SLIDES",
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation": "SLIDES",
-  "application/vnd.google-apps.spreadsheet": "SHEETS",
-  "application/vnd.ms-excel": "SHEETS",
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "SHEETS",
-};
-
-function fileTypeGroup(type: MaterialType, mimeType: string | null): FileTypeGroup {
-  if (type === "YOUTUBE") return "VIDEO";
-  if (type === "LINK") return "LINK";
-  if (type === "DRIVE_FILE" && mimeType) {
-    if (mimeType.startsWith("image/")) return "IMAGE";
-    if (mimeType.startsWith("video/")) return "VIDEO";
-    if (MIME_GROUPS[mimeType]) return MIME_GROUPS[mimeType];
-  }
-  return "OTHER";
 }
 
 interface MaterialRow {

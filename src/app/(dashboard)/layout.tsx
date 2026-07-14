@@ -1,10 +1,13 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { getSession } from "@/features/auth/server/session";
 import { getLyceumConnectionStatus } from "@/features/lyceum/server/session";
 import { Sidebar } from "@/features/auth/components/sidebar";
 import { ThemeToggle } from "@/features/auth/components/theme-toggle";
 import { NotificationBell } from "@/features/notifications/components/notification-bell";
 import { listNotifications } from "@/features/notifications/server/notifications";
+import { DownloadsBell } from "@/features/downloads/components/downloads-bell";
+import { listAllDownloads } from "@/features/downloads/server/downloads";
 
 export default async function DashboardLayout({
   children,
@@ -15,6 +18,7 @@ export default async function DashboardLayout({
   if (!session.isLoggedIn) {
     redirect("/");
   }
+  const tMaterials = await getTranslations("materials");
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -29,6 +33,9 @@ export default async function DashboardLayout({
       <div className="fixed top-4 right-4 z-30 flex items-center gap-2">
         <div className="rounded-full bg-card p-2 shadow-lg">
           <NotificationBell initialNotifications={listNotifications()} />
+        </div>
+        <div className="rounded-full bg-card p-2 shadow-lg">
+          <DownloadsBell initialDownloads={listAllDownloads(tMaterials("untitled"))} />
         </div>
         <div className="rounded-full bg-card p-2 shadow-lg">
           <ThemeToggle open />

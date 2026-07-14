@@ -10,7 +10,7 @@
     "classes": "Turmas",
     "feed": "Feed",
     "deadlines": "Prazos",
-    "downloads": "Downloads",
+    "materials": "Meus Materiais",
     "settings": "Configurações",
     "integrations": "Integrações",
     "lyceumExpired": "expirado",
@@ -145,6 +145,11 @@
       "done": "Baixado ✓",
       "error": "Erro"
     }
+  },
+  "myMaterials": {
+    "title": "Meus Materiais",
+    "empty": "Nenhum material baixado ainda.",
+    "allCourses": "Todas as turmas"
   },
   "signIn": {
     "tagline": "Organize turmas, materiais e prazos do Google Classroom num só lugar.",

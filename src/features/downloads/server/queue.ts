@@ -1,8 +1,5 @@
 import { downloadMaterialFile, markDone, markDownloading, markError, markQueued } from "@/features/downloads/server/downloads";
 
-// ponytail: in-memory queue, no persistence between restarts. Upgrade to a
-// persisted SQLite job table only if the app needs to survive a restart
-// mid-download (see Gargalo 1 in the project's vault docs).
 const CONCURRENCY = 3;
 const MAX_ATTEMPTS = 5;
 

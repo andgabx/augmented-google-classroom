@@ -10,7 +10,7 @@
     "classes": "Classes",
     "feed": "Feed",
     "deadlines": "Deadlines",
-    "downloads": "Downloads",
+    "materials": "My Materials",
     "settings": "Settings",
     "integrations": "Integrations",
     "lyceumExpired": "expired",
@@ -145,6 +145,11 @@
       "done": "Downloaded ✓",
       "error": "Error"
     }
+  },
+  "myMaterials": {
+    "title": "My Materials",
+    "empty": "No downloaded materials yet.",
+    "allCourses": "All courses"
   },
   "signIn": {
     "tagline": "Organize classes, materials, and deadlines from Google Classroom in one place.",

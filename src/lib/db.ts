@@ -88,6 +88,10 @@ db.exec(`
     mime_type TEXT
   );
 
+  CREATE INDEX IF NOT EXISTS idx_materials_post_id ON materials(post_id);
+  CREATE INDEX IF NOT EXISTS idx_posts_course_id ON posts(course_id);
+  CREATE INDEX IF NOT EXISTS idx_posts_topic_id ON posts(topic_id);
+
   CREATE TABLE IF NOT EXISTS submission_attachments (
     id TEXT PRIMARY KEY,
     post_id TEXT NOT NULL,

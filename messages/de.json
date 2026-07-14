@@ -10,7 +10,7 @@
     "classes": "Kurse",
     "feed": "Feed",
     "deadlines": "Fristen",
-    "downloads": "Downloads",
+    "materials": "Meine Materialien",
     "settings": "Einstellungen",
     "integrations": "Integrationen",
     "lyceumExpired": "abgelaufen",
@@ -145,6 +145,11 @@
       "done": "Heruntergeladen ✓",
       "error": "Fehler"
     }
+  },
+  "myMaterials": {
+    "title": "Meine Materialien",
+    "empty": "Noch keine heruntergeladenen Materialien.",
+    "allCourses": "Alle Kurse"
   },
   "signIn": {
     "tagline": "Organisiere Kurse, Materialien und Fristen von Google Classroom an einem Ort.",

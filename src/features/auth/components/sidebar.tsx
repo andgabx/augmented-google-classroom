@@ -7,8 +7,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useTranslations } from "next-intl";
 import {
   ChevronDown,
-  ChevronsRight,
-  Download,
+  FolderOpen,
   GraduationCap,
   ListChecks,
   LogOut,
@@ -40,7 +39,7 @@ interface SidebarUser {
 
 type NavItem = {
   href: string;
-  key: "classes" | "feed" | "deadlines" | "downloads" | "settings";
+  key: "classes" | "feed" | "deadlines" | "materials" | "settings";
   icon: ComponentType<{ className?: string; strokeWidth?: number }>;
 };
 
@@ -48,7 +47,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/feed", key: "feed", icon: Rss },
   { href: "/courses", key: "classes", icon: GraduationCap },
   { href: "/deadlines", key: "deadlines", icon: ListChecks },
-  { href: "/downloads", key: "downloads", icon: Download },
+  { href: "/materials", key: "materials", icon: FolderOpen },
 ];
 
 const SETTINGS_ITEM: NavItem = { href: "/settings", key: "settings", icon: Settings };
@@ -59,11 +58,13 @@ const LYCEUM_SUBITEMS: { href: string; key: "lyceumHistorico" | "lyceumBoletim" 
   { href: "/lyceum/faltas", key: "lyceumFaltas" },
 ];
 
+const SIDEBAR_TRANSITION = { duration: 0.12, ease: [0.16, 1, 0.3, 1] } as const;
+
 const LABEL_MOTION = {
   initial: { opacity: 0, y: 8 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 8 },
-  transition: { duration: 0.15 },
+  transition: SIDEBAR_TRANSITION,
 } as const;
 
 export function Sidebar({
@@ -73,7 +74,7 @@ export function Sidebar({
   user: SidebarUser;
   lyceumStatus: "connected" | "expired" | "disconnected";
 }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [lyceumOpen, setLyceumOpen] = useState(false);
   const pathname = usePathname();
   const lyceumActive = LYCEUM_SUBITEMS.some(({ href }) => pathname === href || pathname.startsWith(`${href}/`));
@@ -87,7 +88,7 @@ export function Sidebar({
       <Link
         key={href}
         href={href}
-        className={`flex h-10 items-center overflow-hidden rounded-md transition-colors ${open ? "" : "justify-center"} ${
+        className={`flex h-10 w-full items-center overflow-hidden rounded-md transition-colors ${open ? "" : "justify-center"} ${
           active
             ? "bg-sidebar-accent text-sidebar-accent-foreground"
             : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
@@ -114,8 +115,10 @@ export function Sidebar({
     <motion.nav
       initial={false}
       animate={{ width: open ? 240 : 68 }}
-      transition={{ duration: 0.2, ease: "easeInOut" }}
-      className="sticky top-3 m-3 flex h-[calc(100vh-1.5rem)] shrink-0 flex-col rounded-2xl bg-sidebar p-2 shadow-lg"
+      transition={SIDEBAR_TRANSITION}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+      className="sticky top-3 m-3 flex h-[calc(100vh-1.5rem)] shrink-0 flex-col overflow-hidden rounded-2xl bg-sidebar p-2 shadow-lg"
     >
       <div
         className={`mb-3 flex items-center gap-2 border-b border-sidebar-border/60 pb-3 ${open ? "" : "justify-center"}`}
@@ -278,23 +281,6 @@ export function Sidebar({
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
-
-        <button
-          type="button"
-          onClick={() => setOpen((value) => !value)}
-          className={`flex h-10 w-full items-center overflow-hidden rounded-md text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent/60 ${open ? "" : "justify-center"}`}
-        >
-          <div className="grid size-10 shrink-0 place-content-center">
-            <ChevronsRight className={`size-5 transition-transform ${open ? "rotate-180" : ""}`} />
-          </div>
-          <AnimatePresence>
-            {open && (
-              <motion.span {...LABEL_MOTION} className="whitespace-nowrap text-sm font-medium">
-                {tSidebar("collapse")}
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </button>
       </div>
     </motion.nav>
   );

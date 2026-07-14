@@ -1,33 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import {
-  ArrowRight,
-  File as FileIcon,
-  FileText,
-  Image as ImageIcon,
-  Link as LinkIcon,
-  Presentation,
-  Sheet as SheetIcon,
-  Video,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { ViewItems, ViewToggle, type ViewMode } from "@/components/view-toggle";
 import { DOWNLOAD_STATUS_KEY } from "@/features/downloads/constants";
 import type { DownloadStatus } from "@/features/downloads/types/download";
-import type { FileTypeGroup, MaterialListItem } from "@/features/materials/types/post";
+import { FILE_TYPE_ICON } from "@/features/materials/lib/file-type-group";
+import type { MaterialListItem } from "@/features/materials/types/post";
 
-const FILE_TYPE_ICON: Record<FileTypeGroup, LucideIcon> = {
-  PDF: FileText,
-  WORD: FileText,
-  SLIDES: Presentation,
-  SHEETS: SheetIcon,
-  IMAGE: ImageIcon,
-  VIDEO: Video,
-  LINK: LinkIcon,
-  OTHER: FileIcon,
-};
 
 export interface MaterialWithStatus extends MaterialListItem {
   downloadStatus: DownloadStatus | undefined;
