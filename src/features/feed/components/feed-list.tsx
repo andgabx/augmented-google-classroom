@@ -79,22 +79,43 @@ function FeedItem({
   );
 }
 
-export function FeedList({ posts, showCourse = true }: { posts: FeedPost[]; showCourse?: boolean }) {
+export function FeedItems({
+  posts,
+  showCourse = true,
+  view,
+}: {
+  posts: FeedPost[];
+  showCourse?: boolean;
+  view: ViewMode;
+}) {
   const t = useTranslations("feed");
-  const [view, setView] = useState<ViewMode>("list");
 
   if (posts.length === 0) {
     return <p className="text-sm text-muted-foreground">{t("empty")}</p>;
   }
 
   return (
+    <ul className={view === "grid" ? "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4" : "flex flex-col gap-2"}>
+      {posts.map((post, index) => (
+        <FeedItem key={post.id} post={post} showCourse={showCourse} view={view} index={index} />
+      ))}
+    </ul>
+  );
+}
+
+export function FeedList({ posts, showCourse = true }: { posts: FeedPost[]; showCourse?: boolean }) {
+  const [view, setView] = useState<ViewMode>("list");
+
+  if (posts.length === 0) {
+    return <FeedItems posts={posts} showCourse={showCourse} view={view} />;
+  }
+
+  return (
     <>
-      <ViewToggle value={view} onChange={setView} />
-      <ul className={view === "grid" ? "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4" : "flex flex-col gap-2"}>
-        {posts.map((post, index) => (
-          <FeedItem key={post.id} post={post} showCourse={showCourse} view={view} index={index} />
-        ))}
-      </ul>
+      <div className="py-3">
+        <ViewToggle value={view} onChange={setView} />
+      </div>
+      <FeedItems posts={posts} showCourse={showCourse} view={view} />
     </>
   );
 }

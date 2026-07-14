@@ -2,7 +2,9 @@
   "common": {
     "language": "Idioma",
     "portuguese": "Português",
-    "english": "English"
+    "english": "English",
+    "spanish": "Espanhol",
+    "german": "Alemão"
   },
   "sidebar": {
     "classes": "Turmas",
@@ -70,7 +72,17 @@
     "statusTurnedInLate": "Entregue com atraso",
     "statusMissing": "Atrasada",
     "statusPending": "Pendente",
-    "mySubmission": "Minha entrega"
+    "mySubmission": "Minha entrega",
+    "groupOverdue": "Atrasadas",
+    "groupThisWeek": "Esta semana",
+    "groupLater": "Mais tarde",
+    "groupDone": "Entregues"
+  },
+  "notifications": {
+    "title": "Notificações",
+    "clear": "Limpar",
+    "empty": "Nenhuma notificação nova.",
+    "untitled": "Sem título"
   },
   "feed": {
     "title": "Feed",
@@ -167,6 +179,8 @@
   },
   "settings": {
     "title": "Configurações",
+    "languageTitle": "Idioma",
+    "languageIntro": "Escolha o idioma usado em todo o aplicativo.",
     "lyceumTitle": "Portal Lyceum",
     "lyceumIntro": "Conecte sua conta do Lyceum para trazer boletim e histórico para dentro do app. O login abre uma janela do Chrome para você autenticar diretamente no portal da sua instituição.",
     "tenantLabel": "Instituição",

@@ -2,7 +2,9 @@
   "common": {
     "language": "Language",
     "portuguese": "Português",
-    "english": "English"
+    "english": "English",
+    "spanish": "Español",
+    "german": "Deutsch"
   },
   "sidebar": {
     "classes": "Classes",
@@ -70,7 +72,17 @@
     "statusTurnedInLate": "Turned in late",
     "statusMissing": "Missing",
     "statusPending": "Pending",
-    "mySubmission": "My submission"
+    "mySubmission": "My submission",
+    "groupOverdue": "Overdue",
+    "groupThisWeek": "This week",
+    "groupLater": "Later",
+    "groupDone": "Turned in"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "clear": "Clear",
+    "empty": "No new notifications.",
+    "untitled": "Untitled"
   },
   "feed": {
     "title": "Feed",
@@ -167,6 +179,8 @@
   },
   "settings": {
     "title": "Settings",
+    "languageTitle": "Language",
+    "languageIntro": "Choose the language used throughout the app.",
     "lyceumTitle": "Lyceum portal",
     "lyceumIntro": "Connect your Lyceum account to bring grades and academic history into the app. Login opens a Chrome window so you can authenticate directly on your institution's portal.",
     "tenantLabel": "Institution",

@@ -22,6 +22,7 @@ export async function syncDeadlinesAction(_prevState: SyncDeadlinesState): Promi
     }
     revalidatePath("/deadlines");
     revalidatePath("/courses");
+    revalidatePath("/feed");
     return { success: true, message: t("syncSuccess") };
   } catch {
     return { success: false, message: t("syncError") };

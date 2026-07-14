@@ -125,6 +125,11 @@ db.exec(`
     name TEXT PRIMARY KEY
   );
 
+  CREATE TABLE IF NOT EXISTS notification_state (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    cleared_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
   CREATE VIRTUAL TABLE IF NOT EXISTS post_search_fts USING fts5(
     post_id UNINDEXED, course_id UNINDEXED, category UNINDEXED,
     title, body, content
