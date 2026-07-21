@@ -39,7 +39,7 @@ Centraliza as turmas, materiais e prazos do Google Classroom com as notas e falt
    npm run dev
    ```
 
-3. Abra [http://localhost:3000](http://localhost:3000) — a primeira execução leva direto pro assistente de setup (`/setup`), que guia a criação de um projeto no Google Cloud Console e a configuração das credenciais OAuth (Client ID/Secret) para o Classroom e o Drive.
+3. Abra [http://localhost:3000](http://localhost:3000) — a primeira execução leva direto pro assistente de setup (`/setup`). Antes disso, siga o guia da [Wiki: Configuração do Google Cloud](https://github.com/andgabx/augmented-google-classroom/wiki/Google-Setup) pra criar o projeto, ativar as APIs e gerar as credenciais OAuth (Client ID/Secret).
 
 ---
 
@@ -78,4 +78,4 @@ As new integrations come in, they get listed here.
    npm run dev
    ```
 
-3. Open [http://localhost:3000](http://localhost:3000) — the first run takes you straight to the setup wizard (`/setup`), which walks through creating a Google Cloud project and configuring OAuth credentials (Client ID/Secret) for Classroom and Drive.
+3. Open [http://localhost:3000](http://localhost:3000) — the first run takes you straight to the setup wizard (`/setup`). Before that, follow the [Wiki: Google Cloud Setup](https://github.com/andgabx/augmented-google-classroom/wiki/Google-Setup) guide to create the project, enable the APIs, and generate the OAuth credentials (Client ID/Secret).
