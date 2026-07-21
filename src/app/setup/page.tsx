@@ -76,18 +76,24 @@ export default async function SetupPage({
             })}
           </p>
           <ul className="flex flex-col gap-1 text-sm text-muted-foreground list-disc list-inside">
+            <li>{t.rich("step3BrandingItem", richComponents)}</li>
             <li>{t.rich("step3UserType", richComponents)}</li>
-            <li>{t("step3FillApp")}</li>
+            <li>{t.rich("step3TestUsers", richComponents)}</li>
             <li>
               {t.rich("step3ScopesIntro", richComponents)}
               <ul className="mt-1 ml-4 flex flex-col gap-0.5 font-mono text-xs">
                 <li>.../auth/classroom.courses.readonly</li>
                 <li>.../auth/classroom.coursework.me.readonly</li>
+                <li>.../auth/classroom.courseworkmaterials.readonly</li>
                 <li>.../auth/classroom.announcements.readonly</li>
+                <li>.../auth/classroom.topics.readonly</li>
+                <li>.../auth/classroom.rosters.readonly</li>
+                <li>.../auth/classroom.profile.photos</li>
                 <li>.../auth/drive.readonly</li>
+                <li>.../auth/userinfo.email</li>
+                <li>.../auth/userinfo.profile</li>
               </ul>
             </li>
-            <li>{t.rich("step3TestUsers", richComponents)}</li>
           </ul>
         </section>
 
@@ -97,7 +103,7 @@ export default async function SetupPage({
           </h2>
           <p className="text-sm text-muted-foreground">
             {t.rich("step4Body", {
-              link: externalLink("https://console.cloud.google.com/apis/credentials"),
+              link: externalLink("https://console.cloud.google.com/auth/clients"),
               ...richComponents,
             })}
           </p>

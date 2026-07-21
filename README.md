@@ -1,4 +1,4 @@
-![Augmented Classroom](public/readme-banner.svg)
+![Augmented Google Classroom](public/readme-banner.svg)
 
 <p align="center">
   <a href="#-português">🇧🇷 Português</a> · <a href="#-english">🇺🇸 English</a>
@@ -6,7 +6,7 @@
 
 ## 🇧🇷 Português
 
-Centraliza as turmas, materiais e prazos do Google Classroom com as notas e faltas do Lyceum num só lugar — sem alternar entre sistemas, sem a cara de portal acadêmico corporativo. O nome vem daí: é o Classroom *aumentado* ("augmented", no sentido de ganhar uma camada extra por cima, como numa realidade aumentada) com o que ele não tem, o Lyceum, numa camada só — inspirado na extensão Augmented Steam, que faz algo parecido com a loja da Steam. Cada pessoa roda a própria instância, com as próprias credenciais Google.
+Centraliza as turmas, materiais e prazos do Google Classroom com as notas e faltas do Lyceum num só lugar — sem alternar entre sistemas, sem a cara de portal acadêmico corporativo. O nome vem daí: é o Google Classroom *aumentado* ("augmented", no sentido de ganhar uma camada extra por cima, como numa realidade aumentada) com o que ele não tem, o Lyceum, numa camada só — inspirado na extensão Augmented Steam, que faz algo parecido com a loja da Steam. Cada pessoa roda a própria instância, com as próprias credenciais Google.
 
 ### Features
 
@@ -45,7 +45,7 @@ Centraliza as turmas, materiais e prazos do Google Classroom com as notas e falt
 
 ## 🇺🇸 English
 
-Centralizes Google Classroom courses, materials, and deadlines together with Lyceum grades and attendance in one place — no switching between systems, no corporate academic-portal feel. Hence the name: Classroom *augmented* with the one thing it's missing, Lyceum, in a single layer — inspired by the Augmented Steam browser extension, which does something similar for the Steam store. Each person runs their own instance, with their own Google credentials.
+Centralizes Google Classroom courses, materials, and deadlines together with Lyceum grades and attendance in one place — no switching between systems, no corporate academic-portal feel. Hence the name: Google Classroom *augmented* with the one thing it's missing, Lyceum, in a single layer — inspired by the Augmented Steam browser extension, which does something similar for the Steam store. Each person runs their own instance, with their own Google credentials.
 
 ### Features
 

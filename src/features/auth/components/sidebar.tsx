@@ -130,7 +130,7 @@ export function Sidebar({
               {...LABEL_MOTION}
               className="whitespace-nowrap text-sm font-semibold tracking-tight text-sidebar-foreground"
             >
-              Augmented Classroom
+              Augmented Google Classroom
             </motion.span>
           )}
         </AnimatePresence>

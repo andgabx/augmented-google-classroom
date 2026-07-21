@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Augmented Classroom",
+  title: "Augmented Google Classroom",
   description: "Companion app for organizing Google Classroom materials and deadlines.",
 };
 
